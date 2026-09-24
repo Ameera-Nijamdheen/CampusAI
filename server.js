@@ -380,6 +380,14 @@ app.post('/api/projects', authenticateToken, (req, res) => {
     }
 });
 
+// Public Supabase configuration endpoint (safely exposes public URL and anon key)
+app.get('/api/config/supabase', (req, res) => {
+    res.json({
+        url: process.env.SUPABASE_URL || "",
+        anonKey: process.env.SUPABASE_ANON_KEY || ""
+    });
+});
+
 // Clean root handler
 app.get('/', (req, res) => {
     res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
@@ -396,5 +404,6 @@ app.listen(PORT, () => {
     console.log(`🚀 CampusAI Backend Server running on http://localhost:${PORT}`);
     console.log(`⚡ Serving static files from: ${FRONTEND_DIR}`);
     console.log(`🤖 Groq AI Integration: ${groqService.hasValidGroqKey() ? 'CONNECTED' : 'STANDBY (Intelligent Engine Active)'}`);
+    console.log(`🔐 Supabase: ${process.env.SUPABASE_URL ? 'CONFIGURED (' + process.env.SUPABASE_URL + ')' : 'NOT CONFIGURED (set SUPABASE_URL in .env)'}`);
     console.log(`====================================================`);
 });

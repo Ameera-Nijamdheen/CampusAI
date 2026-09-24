@@ -1,135 +1,92 @@
 // ==========================================================
-// CampusAI Supabase & Google Authentication Client Configuration
+// CampusAI Supabase & Google Authentication - Production Ready
+// Credentials auto-loaded from backend /api/config/supabase
 // ==========================================================
 
-// 🔑 REPLACE THESE WITH YOUR SUPABASE PROJECT CREDENTIALS:
-// 1. Go to https://supabase.com/dashboard -> Your Project -> Project Settings -> API
-// 2. Copy the "Project URL" and the "anon public" API Key
-window.CAMPUS_AI_SUPABASE_CONFIG = {
-    url: window.SUPABASE_URL || "https://your-project-id.supabase.co",
-    anonKey: window.SUPABASE_ANON_KEY || "your-anon-key-here"
-};
-
-// Global Supabase Client Instance
+window.CAMPUS_AI_SUPABASE_CONFIG = { url: "", anonKey: "" };
 let supabaseClient = null;
 
-function getSupabase() {
-    if (supabaseClient) return supabaseClient;
-    
-    const config = window.CAMPUS_AI_SUPABASE_CONFIG;
-    if (window.supabase && config.url && config.url.indexOf("your-project-id") === -1) {
-        try {
-            supabaseClient = window.supabase.createClient(config.url, config.anonKey);
-            return supabaseClient;
-        } catch (e) {
-            console.warn("Supabase init warning:", e);
-        }
-    }
-    return null;
-}
-
-// Check if user has valid Supabase configuration
-function isSupabaseConfigured() {
-    const config = window.CAMPUS_AI_SUPABASE_CONFIG;
-    return !!(config && config.url && config.anonKey && 
-             config.url.indexOf("your-project-id") === -1 &&
-             config.anonKey.indexOf("your-anon-key") === -1);
-}
-
-// Sign In with Google via Supabase OAuth
-async function signInWithGoogle() {
-    const sb = getSupabase();
-    if (!sb) {
-        // Fallback / Guidance prompt if Supabase keys not set yet
-        const enteredUrl = prompt(
-            "⚡ Supabase Configuration Required\n\nTo connect Google Sign-In, please enter your Supabase Project URL (e.g., https://xyzcompany.supabase.co):",
-            localStorage.getItem("custom_supabase_url") || ""
-        );
-        if (!enteredUrl) return;
-
-        const enteredKey = prompt(
-            "Enter your Supabase 'anon public' API key:",
-            localStorage.getItem("custom_supabase_anon_key") || ""
-        );
-        if (!enteredKey) return;
-
-        localStorage.setItem("custom_supabase_url", enteredUrl.trim());
-        localStorage.setItem("custom_supabase_anon_key", enteredKey.trim());
-        window.CAMPUS_AI_SUPABASE_CONFIG.url = enteredUrl.trim();
-        window.CAMPUS_AI_SUPABASE_CONFIG.anonKey = enteredKey.trim();
-        
-        showToast("Supabase configured! Redirecting to Google...", "info");
-        setTimeout(() => signInWithGoogle(), 800);
-        return;
-    }
-
+// Auto-load credentials from backend (reads from .env)
+async function loadSupabaseConfig() {
     try {
-        const redirectUrl = window.location.origin + window.location.pathname.replace(/login\.html|register\.html/, 'student.html');
-        const { data, error } = await sb.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                redirectTo: redirectUrl,
-                queryParams: {
-                    access_type: 'offline',
-                    prompt: 'consent'
-                }
+        const res = await fetch('/api/config/supabase');
+        if (res.ok) {
+            const cfg = await res.json();
+            if (cfg.url && cfg.anonKey) {
+                window.CAMPUS_AI_SUPABASE_CONFIG.url = cfg.url;
+                window.CAMPUS_AI_SUPABASE_CONFIG.anonKey = cfg.anonKey;
+                return true;
             }
-        });
-
-        if (error) throw error;
-    } catch (err) {
-        console.error("Google Auth error:", err);
-        showToast(err.message || "Failed to start Google sign-in", "error");
-    }
-}
-
-// Profile Mandatory Fields Check
-function isProfileComplete(profile) {
-    if (!profile) return false;
-    const required = ['fullName', 'college', 'course', 'year', 'targetRole', 'skills'];
-    for (const key of required) {
-        if (!profile[key] || String(profile[key]).trim() === '') {
-            return false;
         }
-    }
-    return true;
-}
+    } catch (e) { /* offline fallback */ }
 
-// Listen to Supabase Auth state changes
-window.addEventListener("DOMContentLoaded", async () => {
-    // Check custom keys from localStorage if any
+    // Fallback to localStorage (set via "Configure Supabase" button)
     const storedUrl = localStorage.getItem("custom_supabase_url");
     const storedKey = localStorage.getItem("custom_supabase_anon_key");
     if (storedUrl && storedKey) {
         window.CAMPUS_AI_SUPABASE_CONFIG.url = storedUrl;
         window.CAMPUS_AI_SUPABASE_CONFIG.anonKey = storedKey;
+        return true;
     }
+    return false;
+}
 
+function getSupabase() {
+    if (supabaseClient) return supabaseClient;
+    const { url, anonKey } = window.CAMPUS_AI_SUPABASE_CONFIG;
+    if (window.supabase && url && anonKey && !url.includes("your-project-id")) {
+        try {
+            supabaseClient = window.supabase.createClient(url, anonKey);
+            window.supabaseClient = supabaseClient; // expose globally
+            return supabaseClient;
+        } catch (e) { console.warn("Supabase init:", e); }
+    }
+    return null;
+}
+
+function isSupabaseConfigured() {
+    const { url, anonKey } = window.CAMPUS_AI_SUPABASE_CONFIG;
+    return !!(url && anonKey && !url.includes("your-project-id") && !anonKey.includes("your-supabase"));
+}
+
+// Google Sign-In via Supabase OAuth
+async function signInWithGoogle() {
     const sb = getSupabase();
-    if (!sb) return;
-
+    if (!sb) {
+        promptSupabaseKeys();
+        return;
+    }
     try {
-        const { data: { session } } = await sb.auth.getSession();
-        if (session && session.user) {
-            handleSupabaseSession(session);
-        }
-
-        sb.auth.onAuthStateChange(async (event, session) => {
-            if (event === 'SIGNED_IN' && session) {
-                handleSupabaseSession(session);
-            } else if (event === 'SIGNED_OUT') {
-                clearAllUserSessionData();
+        const origin = window.location.origin;
+        const path = window.location.pathname;
+        const redirectTo = origin + path.replace(/login\.html|register\.html/, 'student.html');
+        const { error } = await sb.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo,
+                queryParams: { access_type: 'offline', prompt: 'consent' }
             }
         });
-    } catch (e) {
-        console.warn("Supabase session check:", e);
+        if (error) throw error;
+    } catch (err) {
+        console.error("Google Auth error:", err);
+        if (typeof showToast !== 'undefined') {
+            showToast(err.message || "Failed to start Google sign-in. Check Supabase config.", "error");
+        }
     }
-});
+}
 
+// Profile complete check
+function isProfileComplete(profile) {
+    if (!profile) return false;
+    const required = ['fullName', 'college', 'course', 'year', 'targetRole', 'skills'];
+    return required.every(k => profile[k] && String(profile[k]).trim() !== '');
+}
+
+// Handle Supabase session (Google OAuth callback or existing session)
 async function handleSupabaseSession(session) {
     const user = session.user;
     const meta = user.user_metadata || {};
-    
     const campusUser = {
         id: user.id,
         email: user.email,
@@ -137,28 +94,33 @@ async function handleSupabaseSession(session) {
         avatar_url: meta.avatar_url || meta.picture || ""
     };
 
-    setAuthToken(session.access_token);
-    setStoredUser(campusUser);
+    // Store auth token and user (works with existing auth wall)
+    if (typeof setAuthToken !== 'undefined') setAuthToken(session.access_token);
+    if (typeof setStoredUser !== 'undefined') setStoredUser(campusUser);
 
-    // Sync with backend / check profile completeness
+    // Prefill studentName from Google profile
+    if (campusUser.name) localStorage.setItem("studentName", campusUser.name);
+
     const profile = getStoredProfile();
-    const isComplete = isProfileComplete(profile);
+    const complete = isProfileComplete(profile);
+    if (complete) {
+        localStorage.setItem("campusai_profile_completed", "true");
+    } else {
+        localStorage.removeItem("campusai_profile_completed");
+    }
 
-    // If current page is login or register, route appropriately
     const path = window.location.pathname;
-    if (path.endsWith("login.html") || path.endsWith("register.html")) {
-        if (!isComplete) {
-            window.location.href = "student.html?mandatory=true";
-        } else {
-            window.location.href = "career-hub.html";
-        }
+    const isAuthPage = path.endsWith("login.html") || path.endsWith("register.html");
+    if (isAuthPage) {
+        setTimeout(() => {
+            window.location.href = complete ? "career-hub.html" : "student.html?mandatory=true";
+        }, 300);
     }
 }
 
 function getStoredProfile() {
     try {
-        const raw = localStorage.getItem("campusai_profile");
-        return raw ? JSON.parse(raw) : {
+        return {
             fullName: localStorage.getItem("studentName") || "",
             college: localStorage.getItem("studentCollege") || "",
             course: localStorage.getItem("studentCourse") || "",
@@ -167,7 +129,30 @@ function getStoredProfile() {
             skills: localStorage.getItem("studentSkills") || "",
             placeOfInterest: localStorage.getItem("studentPlace") || ""
         };
-    } catch (e) {
-        return null;
-    }
+    } catch (e) { return null; }
 }
+
+// Boot: load config then set up auth listener
+(async () => {
+    await loadSupabaseConfig();
+    const sb = getSupabase();
+    if (!sb) return;
+
+    try {
+        // Handle OAuth callback (Google redirect comes back with #access_token or ?code=)
+        const { data: { session } } = await sb.auth.getSession();
+        if (session && session.user) {
+            await handleSupabaseSession(session);
+        }
+
+        sb.auth.onAuthStateChange(async (event, session) => {
+            if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
+                await handleSupabaseSession(session);
+            } else if (event === 'SIGNED_OUT') {
+                if (typeof clearAllUserSessionData !== 'undefined') clearAllUserSessionData();
+            }
+        });
+    } catch (e) {
+        console.warn("Supabase auth boot:", e);
+    }
+})();
