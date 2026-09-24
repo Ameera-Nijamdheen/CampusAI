@@ -1,0 +1,650 @@
+{
+  "users": [
+    {
+      "id": "demo-user-1",
+      "name": "Demo Student",
+      "email": "demo@campusai.com",
+      "passwordHash": "$2a$10$ZdhbfuSrerCB69F8P5Xcz.xozOiSCHLLEOV3Z/A9xc3pDky1rz7Ii",
+      "createdAt": "2026-09-21T10:56:50.706Z"
+    },
+    {
+      "id": "user-1789988483482-rnkib",
+      "name": "Rohit Verma",
+      "email": "student_983036369@university.edu",
+      "passwordHash": "$2a$10$Fog9/WwHQGY0f5KJI1rR9.NRVZXISdMQAaqwvENAe6U0fmz2pg8cS",
+      "createdAt": "2026-09-21T11:01:23.482Z"
+    },
+    {
+      "id": "user-1790155401579-p3cg1",
+      "name": "Test User",
+      "email": "tester_1790155401510@campus.edu",
+      "passwordHash": "$2a$10$54JpTync0y1oU4eGNW7IUuJvqmYQC8drnhQQVA9K/3xk4A/RbZgZW",
+      "createdAt": "2026-09-23T09:23:21.579Z"
+    }
+  ],
+  "profiles": {
+    "demo-user-1": {
+      "userId": "demo-user-1",
+      "fullName": "Demo Student",
+      "college": "Indian Institute of Technology / Tech University",
+      "course": "B.Tech Computer Science & Engineering",
+      "year": "3rd Year",
+      "gpa": "8.9 / 10",
+      "skills": "Python, JavaScript, Machine Learning, PyTorch, Node.js, SQL",
+      "interests": "Artificial Intelligence, Full-Stack Development, Cloud Computing",
+      "placeOfInterest": "Bangalore, India (Hybrid/Remote)",
+      "targetRole": "AI / Machine Learning Engineer",
+      "careerGoals": "Work as an applied AI engineer at high-growth tech firms or global AI labs.",
+      "preferredWorkMode": "Hybrid",
+      "updatedAt": "2026-09-21T10:56:50.706Z"
+    },
+    "user-1789988483482-rnkib": {
+      "userId": "user-1789988483482-rnkib",
+      "fullName": "Rohit Verma",
+      "college": "",
+      "course": "",
+      "year": "",
+      "gpa": "",
+      "skills": "",
+      "interests": "",
+      "placeOfInterest": "Bangalore / Remote",
+      "targetRole": "Software Engineer",
+      "careerGoals": "",
+      "preferredWorkMode": "Hybrid",
+      "updatedAt": "2026-09-21T11:01:23.482Z"
+    },
+    "user-1790155401579-p3cg1": {
+      "userId": "user-1790155401579-p3cg1",
+      "fullName": "Test User",
+      "college": "",
+      "course": "",
+      "year": "",
+      "gpa": "",
+      "skills": "",
+      "interests": "",
+      "placeOfInterest": "Bangalore / Remote",
+      "targetRole": "Software Engineer",
+      "careerGoals": "",
+      "preferredWorkMode": "Hybrid",
+      "updatedAt": "2026-09-23T09:23:21.579Z"
+    }
+  },
+  "achievements": [
+    {
+      "id": 101,
+      "userId": "demo-user-1",
+      "type": "Hackathon",
+      "name": "Smart India Hackathon Finalist",
+      "organization": "Ministry of Education",
+      "year": "2025",
+      "fileName": "SIH_Certificate.pdf",
+      "createdAt": "2026-09-21T10:56:50.706Z"
+    },
+    {
+      "id": 102,
+      "userId": "demo-user-1",
+      "type": "Certification",
+      "name": "Deep Learning Specialization",
+      "organization": "DeepLearning.AI / Coursera",
+      "year": "2025",
+      "fileName": "Coursera_DL.pdf",
+      "createdAt": "2026-09-21T10:56:50.706Z"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1790155401615",
+      "userId": "demo-user-1",
+      "authorName": "Demo Student",
+      "title": "Automated Study Guide",
+      "description": "Full-stack application",
+      "category": "Generative AI",
+      "tags": [
+        "Groq",
+        "FastAPI"
+      ],
+      "demoUrl": "https://github.com",
+      "githubUrl": "https://github.com",
+      "createdAt": "2026-09-23T09:23:21.615Z"
+    },
+    {
+      "id": "proj-1",
+      "userId": "demo-user-1",
+      "authorName": "Demo Student",
+      "title": "AI Tutor & Roadmap Generator",
+      "description": "Autonomous study assistant powered by LLMs that generates custom semester roadmaps and quizzes based on university syllabus.",
+      "category": "Generative AI",
+      "tags": [
+        "Groq",
+        "Python",
+        "Llama-3",
+        "FastAPI"
+      ],
+      "demoUrl": "https://github.com",
+      "githubUrl": "https://github.com",
+      "createdAt": "2026-09-21T10:56:50.548Z"
+    },
+    {
+      "id": "proj-2",
+      "userId": "demo-user-1",
+      "authorName": "Aarav Sharma",
+      "title": "Real-Time Campus Navigation & Event Tracker",
+      "description": "Interactive campus map with geo-fencing for real-time lecture halls, hackathon venues, and student clubs.",
+      "category": "Web Dev",
+      "tags": [
+        "JavaScript",
+        "Leaflet",
+        "Node.js",
+        "Express"
+      ],
+      "demoUrl": "https://github.com",
+      "githubUrl": "https://github.com",
+      "createdAt": "2026-09-21T10:56:50.550Z"
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "opp-1",
+      "title": "AI Innovation Hackathon",
+      "category": "Hackathon",
+      "domain": "AI / ML",
+      "icon": "🤖",
+      "organization": "CampusAI Global Tech Hub",
+      "eligibility": "Undergraduate & Graduate Students",
+      "stipend": "$10,000 Prize Pool + Mentorship",
+      "deadline": "October 30, 2026",
+      "mode": "Hybrid / Bangalore & Online",
+      "location": "Bangalore, India",
+      "description": "Build cutting-edge Artificial Intelligence and Machine Learning solutions with peers across universities.",
+      "skills": [
+        "PyTorch",
+        "Python",
+        "Deep Learning",
+        "FastAPI"
+      ]
+    },
+    {
+      "id": "opp-2",
+      "title": "GenAI Challenge 2026",
+      "category": "Hackathon",
+      "domain": "Generative AI",
+      "icon": "🧠",
+      "organization": "Generative AI Labs",
+      "eligibility": "All enrolled university students",
+      "stipend": "Cloud credits ($5,000) + Cash Awards",
+      "deadline": "November 15, 2026",
+      "mode": "Online / Global",
+      "location": "Remote",
+      "description": "Create breakthrough applications leveraging LLMs, diffusion models, and prompt engineering.",
+      "skills": [
+        "LLMs",
+        "LangChain",
+        "Prompt Engineering",
+        "Full-Stack AI"
+      ]
+    },
+    {
+      "id": "opp-3",
+      "title": "AI/ML Engineering Internship",
+      "category": "Internship",
+      "domain": "AI / ML",
+      "icon": "🚀",
+      "organization": "Apex AI Technologies",
+      "eligibility": "Pre-final and Final Year Students",
+      "stipend": "₹45,000 / Month + PPO",
+      "deadline": "October 25, 2026",
+      "mode": "Hybrid",
+      "location": "Bangalore / Hyderabad",
+      "description": "Hands-on industry internship working on production machine learning pipelines and transformer models.",
+      "skills": [
+        "PyTorch",
+        "MLOps",
+        "Transformers",
+        "Docker"
+      ]
+    },
+    {
+      "id": "opp-4",
+      "title": "Full-Stack Python Developer Internship",
+      "category": "Internship",
+      "domain": "Software Engineering",
+      "icon": "💻",
+      "organization": "DevCore Systems",
+      "eligibility": "Students proficient in Python & Web",
+      "stipend": "₹35,000 / Month",
+      "deadline": "November 10, 2026",
+      "mode": "Remote",
+      "location": "Pune / Remote",
+      "description": "Collaborate with senior engineers building robust Python backend microservices and modern frontends.",
+      "skills": [
+        "Python",
+        "FastAPI",
+        "React",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "id": "opp-5",
+      "title": "Data Science & Analytics Internship",
+      "category": "Internship",
+      "domain": "Data Science",
+      "icon": "📊",
+      "organization": "Insight Analytics Corp",
+      "eligibility": "STEM & Analytics students",
+      "stipend": "₹38,000 / Month",
+      "deadline": "November 20, 2026",
+      "mode": "Hybrid",
+      "location": "Gurgaon / Mumbai",
+      "description": "Analyze large-scale student and enterprise datasets, build predictive models, and deploy executive dashboards.",
+      "skills": [
+        "Data Analysis",
+        "Pandas",
+        "Scikit-Learn",
+        "SQL"
+      ]
+    },
+    {
+      "id": "opp-6",
+      "title": "Modern Web & Cloud Bootcamp",
+      "category": "Workshop",
+      "domain": "Web Development",
+      "icon": "🌐",
+      "organization": "Frontend Guild & AWS Cloud",
+      "eligibility": "Open to all students",
+      "stipend": "Verified Industry Credential",
+      "deadline": "November 12, 2026",
+      "mode": "Virtual Workshop",
+      "location": "Online",
+      "description": "Master modern full-stack web standards, cloud deployment on AWS, and API microservices architecture.",
+      "skills": [
+        "JavaScript",
+        "Node.js",
+        "AWS",
+        "REST APIs"
+      ]
+    },
+    {
+      "id": "opp-7",
+      "title": "Deep Learning & NLP Masterclass",
+      "category": "Workshop",
+      "domain": "AI / ML",
+      "icon": "🎓",
+      "organization": "Tech Academy International",
+      "eligibility": "Beginners & Intermediates",
+      "stipend": "Certificate + GPU Cloud Voucher",
+      "deadline": "October 18, 2026",
+      "mode": "Interactive Live Webinar",
+      "location": "Online",
+      "description": "Comprehensive hands-on workshop covering computer vision, modern transformers, and deploying with Groq.",
+      "skills": [
+        "Deep Learning",
+        "NLP",
+        "Groq API",
+        "Model Optimization"
+      ]
+    },
+    {
+      "id": "opp-8",
+      "title": "National Tech Innovation Challenge",
+      "category": "Competition",
+      "domain": "Innovation",
+      "icon": "🏆",
+      "organization": "Venture Next Foundation",
+      "eligibility": "Teams of 1 to 4 students",
+      "stipend": "₹5,00,000 Incubation Grant",
+      "deadline": "November 25, 2026",
+      "mode": "Hybrid",
+      "location": "Delhi / Bangalore",
+      "description": "Pitch groundbreaking tech solutions tackling healthcare, education, smart cities, and clean energy.",
+      "skills": [
+        "Design Thinking",
+        "Prototyping",
+        "Pitching",
+        "Tech Architecture"
+      ]
+    },
+    {
+      "id": "opp-9",
+      "title": "AI & ML Academic Fellowship",
+      "category": "Scholarship",
+      "domain": "AI / ML",
+      "icon": "💰",
+      "organization": "DeepTech Research Foundation",
+      "eligibility": "Students pursuing AI research",
+      "stipend": "₹1,50,000 Direct Fellowship Grant",
+      "deadline": "January 15, 2027",
+      "mode": "Research Grant",
+      "location": "National",
+      "description": "Financial grant awarding undergraduate and postgraduate researchers advancing machine learning theory & applications.",
+      "skills": [
+        "AI Research",
+        "Machine Learning",
+        "Mathematics",
+        "Ethics in AI"
+      ]
+    }
+  ],
+  "applications": [
+    {
+      "id": "app-1790155401611",
+      "userId": "demo-user-1",
+      "opportunityTitle": "AI Innovation Hackathon",
+      "applicantName": "Demo Student",
+      "email": "demo@campusai.com",
+      "college": "IIT",
+      "skills": "Python, PyTorch",
+      "coverNote": "",
+      "status": "Submitted",
+      "submittedAt": "2026-09-23T09:23:21.611Z"
+    }
+  ],
+  "guidanceHistory": [
+    {
+      "id": "guide-1790158675326",
+      "userId": "demo-user-1",
+      "query": {
+        "course": "Computer Science",
+        "year": "3rd Year",
+        "college": "Indian Institute of Technology / Tech University",
+        "placeOfInterest": "Bangalore, India (Hybrid/Remote)",
+        "targetRole": "AI / Machine Learning Engineer",
+        "skills": "Python, JavaScript, Machine Learning, PyTorch, Node.js, SQL",
+        "interests": "Artificial Intelligence, Full-Stack Development, Cloud Computing",
+        "focusTopic": ""
+      },
+      "result": {
+        "source": "CampusAI Intelligent Core (Provide Groq API key for live Llama-3.3 LLM generation)",
+        "targetRole": "AI / Machine Learning Engineer",
+        "placeOfInterest": "Bangalore, India (Hybrid/Remote)",
+        "executiveSummary": "As a 3rd Year student in Computer Science, targeting a career as a AI / Machine Learning Engineer in Bangalore, India (Hybrid/Remote) is an exceptional strategic move. The tech ecosystem in Bangalore, India (Hybrid/Remote) has massive demand for engineers who combine core algorithmic foundations with modern applied engineering and deployment skills.",
+        "whatToStudy": [
+          {
+            "subject": "Core Algorithmic Foundations & System Architecture",
+            "importance": "Crucial for tech interviews & high-performance engineering",
+            "topics": [
+              "Data Structures: Trees, Graphs, Hash Maps, Heaps, and Dynamic Programming",
+              "Time & Space Complexity optimization (Big-O analysis)",
+              "Object-Oriented Design & Clean Architecture Patterns",
+              "Database Internals & SQL Indexing (PostgreSQL/MySQL)"
+            ]
+          },
+          {
+            "subject": "Applied Machine Learning & Modern LLMs",
+            "importance": "High-value practical skillset demanded by industry recruiters",
+            "topics": [
+              "Deep Learning Fundamentals: PyTorch, Neural Architectures, Transformers",
+              "LLMs & Generative AI: Prompt Engineering, RAG (Retrieval-Augmented Generation), Vector DBs (Chroma/Pinecone)",
+              "MLOps: Model Evaluation, Fast inference with Groq / vLLM, Dockerization",
+              "Data Wrangling & Statistical Analysis with Pandas, NumPy, and Scikit-Learn"
+            ]
+          },
+          {
+            "subject": "Production Software Engineering & Git Collaboration",
+            "importance": "Separates student coders from industry-ready engineers",
+            "topics": [
+              "Git branch management, PR reviews, and semantic versioning",
+              "Automated unit & integration testing (Jest, PyTest)",
+              "API performance benchmarking & security best practices",
+              "Observability: Structured logging, error tracing, and monitoring"
+            ]
+          }
+        ],
+        "recommendedCourses": [
+          {
+            "title": "Deep Learning Specialization by Andrew Ng",
+            "platform": "Coursera / DeepLearning.AI",
+            "duration": "6 - 8 Weeks",
+            "level": "Intermediate",
+            "whyStudy": "Industry gold standard for mastering foundational principles and modern practical workflows."
+          },
+          {
+            "title": "CS50: Introduction to Computer Science",
+            "platform": "Harvard edX",
+            "duration": "10 Weeks",
+            "level": "Foundational",
+            "whyStudy": "Builds bulletproof mental models in C, Python, Memory Management, and Algorithmic Thinking."
+          },
+          {
+            "title": "Building High-Speed AI Applications with Groq API & Llama-3",
+            "platform": "Groq Developer Hub / Free Tutorial Series",
+            "duration": "2 Weeks",
+            "level": "Advanced Practical",
+            "whyStudy": "Teaches you how to deploy ultra-low latency inference microservices for real-world products."
+          },
+          {
+            "title": "AWS Certified Cloud Practitioner or Solutions Architect Associate",
+            "platform": "Amazon Web Services / Udemy",
+            "duration": "4 - 6 Weeks",
+            "level": "Professional Certification",
+            "whyStudy": "Demonstrates cloud fluency and container deployment readiness on your campus resume."
+          }
+        ],
+        "studyRoadmap": [
+          {
+            "phase": "Phase 1: Foundation Sprint (Day 1 - 30)",
+            "milestones": [
+              "Master Core Language Proficiency (Python or Modern TypeScript)",
+              "Solve 50+ medium LeetCode/HackerRank problems focusing on HashMaps, Two Pointers, and Binary Search",
+              "Complete foundational coursework on database design and basic Git workflows"
+            ]
+          },
+          {
+            "phase": "Phase 2: Applied Mastery & Capstone Build (Day 31 - 60)",
+            "milestones": [
+              "Build a complete full-stack application integrating an AI API (e.g. Groq inference)",
+              "Containerize the backend with Docker and deploy to Render/Vercel/AWS",
+              "Implement secure JWT authentication and comprehensive test coverage"
+            ]
+          },
+          {
+            "phase": "Phase 3: Portfolio Polish & Location-Targeted Placement (Day 61 - 90)",
+            "milestones": [
+              "Optimize GitHub repository with comprehensive README, system architecture diagram, and live demo link",
+              "Benchmark your resume against job descriptions in Bangalore, India (Hybrid/Remote)",
+              "Participate in 2 hackathons on CampusAI and apply for targeted internships in Bangalore, India (Hybrid/Remote)"
+            ]
+          }
+        ],
+        "locationInsights": {
+          "hub": "Bangalore, India (Hybrid/Remote)",
+          "hiringTrends": "The hiring market in Bangalore, India (Hybrid/Remote) values self-driven developers who showcase deployed projects rather than just theoretical certificates. Startups and Tier-1 product companies look for candidates who can take an idea from conception to production.",
+          "topSoughtSkills": [
+            "Problem Solving",
+            "API Engineering",
+            "AI Integration",
+            "Cloud Deployment",
+            "Collaborative Git"
+          ],
+          "localNetworkingTips": "Attend local tech meetups, hackathons, and connect with university alumni working at target firms in Bangalore, India (Hybrid/Remote) on LinkedIn."
+        },
+        "recommendedProjects": [
+          {
+            "title": "Intelligent Campus Assistant with Groq Llama-3",
+            "description": "Build an ultra-fast question answering and course syllabus assistant leveraging Groq's high-speed inference engine.",
+            "techStack": [
+              "Groq API",
+              "Python / Node.js",
+              "Vector Search",
+              "Tailwind/Vanilla CSS"
+            ]
+          },
+          {
+            "title": "Full-Stack Opportunity & Referral Tracker",
+            "description": "A productivity platform allowing students to track internship openings, deadlines, and referral contacts with automated notifications.",
+            "techStack": [
+              "Node.js",
+              "Express",
+              "PostgreSQL/SQLite",
+              "JWT Auth"
+            ]
+          },
+          {
+            "title": "Automated Code Reviewer & Security Linter Bot",
+            "description": "A GitHub Action that parses PR diffs and provides automated feedback on code smells and potential vulnerabilities.",
+            "techStack": [
+              "TypeScript",
+              "GitHub REST API",
+              "Docker"
+            ]
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T10:17:55.326Z"
+    },
+    {
+      "id": "guide-1790155401586",
+      "userId": "demo-user-1",
+      "query": {
+        "course": "B.Tech CSE",
+        "year": "3rd Year",
+        "college": "Indian Institute of Technology / Tech University",
+        "placeOfInterest": "Bangalore",
+        "targetRole": "AI Engineer",
+        "skills": "Python, JavaScript, Machine Learning, PyTorch, Node.js, SQL",
+        "interests": "Artificial Intelligence, Full-Stack Development, Cloud Computing",
+        "focusTopic": ""
+      },
+      "result": {
+        "source": "CampusAI Intelligent Core (Provide Groq API key for live Llama-3.3 LLM generation)",
+        "targetRole": "AI Engineer",
+        "placeOfInterest": "Bangalore",
+        "executiveSummary": "As a 3rd Year student in B.Tech CSE, targeting a career as a AI Engineer in Bangalore is an exceptional strategic move. The tech ecosystem in Bangalore has massive demand for engineers who combine core algorithmic foundations with modern applied engineering and deployment skills.",
+        "whatToStudy": [
+          {
+            "subject": "Core Algorithmic Foundations & System Architecture",
+            "importance": "Crucial for tech interviews & high-performance engineering",
+            "topics": [
+              "Data Structures: Trees, Graphs, Hash Maps, Heaps, and Dynamic Programming",
+              "Time & Space Complexity optimization (Big-O analysis)",
+              "Object-Oriented Design & Clean Architecture Patterns",
+              "Database Internals & SQL Indexing (PostgreSQL/MySQL)"
+            ]
+          },
+          {
+            "subject": "Applied Machine Learning & Modern LLMs",
+            "importance": "High-value practical skillset demanded by industry recruiters",
+            "topics": [
+              "Deep Learning Fundamentals: PyTorch, Neural Architectures, Transformers",
+              "LLMs & Generative AI: Prompt Engineering, RAG (Retrieval-Augmented Generation), Vector DBs (Chroma/Pinecone)",
+              "MLOps: Model Evaluation, Fast inference with Groq / vLLM, Dockerization",
+              "Data Wrangling & Statistical Analysis with Pandas, NumPy, and Scikit-Learn"
+            ]
+          },
+          {
+            "subject": "Production Software Engineering & Git Collaboration",
+            "importance": "Separates student coders from industry-ready engineers",
+            "topics": [
+              "Git branch management, PR reviews, and semantic versioning",
+              "Automated unit & integration testing (Jest, PyTest)",
+              "API performance benchmarking & security best practices",
+              "Observability: Structured logging, error tracing, and monitoring"
+            ]
+          }
+        ],
+        "recommendedCourses": [
+          {
+            "title": "Deep Learning Specialization by Andrew Ng",
+            "platform": "Coursera / DeepLearning.AI",
+            "duration": "6 - 8 Weeks",
+            "level": "Intermediate",
+            "whyStudy": "Industry gold standard for mastering foundational principles and modern practical workflows."
+          },
+          {
+            "title": "CS50: Introduction to Computer Science",
+            "platform": "Harvard edX",
+            "duration": "10 Weeks",
+            "level": "Foundational",
+            "whyStudy": "Builds bulletproof mental models in C, Python, Memory Management, and Algorithmic Thinking."
+          },
+          {
+            "title": "Building High-Speed AI Applications with Groq API & Llama-3",
+            "platform": "Groq Developer Hub / Free Tutorial Series",
+            "duration": "2 Weeks",
+            "level": "Advanced Practical",
+            "whyStudy": "Teaches you how to deploy ultra-low latency inference microservices for real-world products."
+          },
+          {
+            "title": "AWS Certified Cloud Practitioner or Solutions Architect Associate",
+            "platform": "Amazon Web Services / Udemy",
+            "duration": "4 - 6 Weeks",
+            "level": "Professional Certification",
+            "whyStudy": "Demonstrates cloud fluency and container deployment readiness on your campus resume."
+          }
+        ],
+        "studyRoadmap": [
+          {
+            "phase": "Phase 1: Foundation Sprint (Day 1 - 30)",
+            "milestones": [
+              "Master Core Language Proficiency (Python or Modern TypeScript)",
+              "Solve 50+ medium LeetCode/HackerRank problems focusing on HashMaps, Two Pointers, and Binary Search",
+              "Complete foundational coursework on database design and basic Git workflows"
+            ]
+          },
+          {
+            "phase": "Phase 2: Applied Mastery & Capstone Build (Day 31 - 60)",
+            "milestones": [
+              "Build a complete full-stack application integrating an AI API (e.g. Groq inference)",
+              "Containerize the backend with Docker and deploy to Render/Vercel/AWS",
+              "Implement secure JWT authentication and comprehensive test coverage"
+            ]
+          },
+          {
+            "phase": "Phase 3: Portfolio Polish & Location-Targeted Placement (Day 61 - 90)",
+            "milestones": [
+              "Optimize GitHub repository with comprehensive README, system architecture diagram, and live demo link",
+              "Benchmark your resume against job descriptions in Bangalore",
+              "Participate in 2 hackathons on CampusAI and apply for targeted internships in Bangalore"
+            ]
+          }
+        ],
+        "locationInsights": {
+          "hub": "Bangalore",
+          "hiringTrends": "The hiring market in Bangalore values self-driven developers who showcase deployed projects rather than just theoretical certificates. Startups and Tier-1 product companies look for candidates who can take an idea from conception to production.",
+          "topSoughtSkills": [
+            "Problem Solving",
+            "API Engineering",
+            "AI Integration",
+            "Cloud Deployment",
+            "Collaborative Git"
+          ],
+          "localNetworkingTips": "Attend local tech meetups, hackathons, and connect with university alumni working at target firms in Bangalore on LinkedIn."
+        },
+        "recommendedProjects": [
+          {
+            "title": "Intelligent Campus Assistant with Groq Llama-3",
+            "description": "Build an ultra-fast question answering and course syllabus assistant leveraging Groq's high-speed inference engine.",
+            "techStack": [
+              "Groq API",
+              "Python / Node.js",
+              "Vector Search",
+              "Tailwind/Vanilla CSS"
+            ]
+          },
+          {
+            "title": "Full-Stack Opportunity & Referral Tracker",
+            "description": "A productivity platform allowing students to track internship openings, deadlines, and referral contacts with automated notifications.",
+            "techStack": [
+              "Node.js",
+              "Express",
+              "PostgreSQL/SQLite",
+              "JWT Auth"
+            ]
+          },
+          {
+            "title": "Automated Code Reviewer & Security Linter Bot",
+            "description": "A GitHub Action that parses PR diffs and provides automated feedback on code smells and potential vulnerabilities.",
+            "techStack": [
+              "TypeScript",
+              "GitHub REST API",
+              "Docker"
+            ]
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T09:23:21.586Z"
+    }
+  ],
+  "config": {
+    "customGroqKey": ""
+  }
+}

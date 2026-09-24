@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusAI - AI Career &amp; Study Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <section class="hub-section">
+        <div class="hub-container">
+
+            <h1>🤖 AI Career &amp; Study Hub</h1>
+            <p id="hubSubtitle" style="color: #666; margin-top: 6px;">
+                Accelerated by Groq AI. Get personalized study guidance, course recommendations, live career coaching, and benchmark your campus projects.
+            </p>
+
+            <!-- Navigation Tabs -->
+            <div class="hub-tabs">
+                <button class="hub-tab active" data-tab="ai-guide" onclick="switchHubTab('ai-guide')">
+                    ⚡ Groq AI Study &amp; Career Guide
+                </button>
+                <button class="hub-tab" data-tab="ai-chat" onclick="switchHubTab('ai-chat')">
+                    💬 Live AI Career Coach
+                </button>
+                <button class="hub-tab" data-tab="jobs" onclick="switchHubTab('jobs')">
+                    💼 Matching Opportunities
+                </button>
+                <button class="hub-tab" data-tab="showcase" onclick="switchHubTab('showcase')">
+                    🎨 Project Showcase
+                </button>
+                <button class="hub-tab" data-tab="scorer" onclick="switchHubTab('scorer')">
+                    📄 AI Resume Benchmark
+                </button>
+            </div>
+
+            <!-- ====================================================
+                 TAB 1: GROQ AI STUDY & CAREER GUIDE
+                 ==================================================== -->
+            <div id="tab-ai-guide" class="hub-pane active">
+
+                <div class="ai-engine-banner">
+                    <h2>⚡ Autonomous Study &amp; Course Advisor</h2>
+                    <p>
+                        Groq AI analyzes your current college degree, academic stage, technical skills, and target work location to prescribe exactly <strong>what to study</strong>, <strong>what courses to take</strong>, and <strong>how to build a hiring-grade portfolio</strong>.
+                    </p>
+                </div>
+
+                <!-- Input / Parameter Tuning Box -->
+                <div class="ai-generator-panel">
+                    <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--dark);">
+                        🎯 Tailor Your Guidance Parameters
+                    </h3>
+
+                    <div class="generator-grid">
+                        <div>
+                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">Degree &amp; Course</label>
+                            <input type="text" id="guideCourse" placeholder="e.g. B.Tech Computer Science">
+                        </div>
+                        <div>
+                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">Year of Study</label>
+                            <select id="guideYear">
+                                <option value="1st Year">1st Year (Freshman)</option>
+                                <option value="2nd Year">2nd Year (Sophomore)</option>
+                                <option value="3rd Year" selected>3rd Year (Junior)</option>
+                                <option value="4th Year">4th Year (Senior)</option>
+                                <option value="Masters / Postgrad">Postgraduate / Masters</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">📍 Place of Interest (Target City)</label>
+                            <input type="text" id="guidePlace" placeholder="e.g. Bangalore, Hyderabad, Remote">
+                        </div>
+                    </div>
+
+                    <div class="generator-grid">
+                        <div>
+                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">🎯 Dream Career Role</label>
+                            <input type="text" id="guideRole" placeholder="e.g. AI / Machine Learning Engineer">
+                        </div>
+                        <div>
+                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">🛠️ Current Skills</label>
+                            <input type="text" id="guideSkills" placeholder="e.g. Python, C++, React, SQL">
+                        </div>
+                        <div>
+                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">❓ Focus Question (Optional)</label>
+                            <input type="text" id="guideFocus" placeholder="e.g. What specific courses should I take for GenAI?">
+                        </div>
+                    </div>
+
+                    <button id="btnGenerateGuidance" class="btn-primary-action" onclick="generateAiCareerGuidance()" style="margin-top: 10px;">
+                        ✨ Generate AI Study Plan &amp; Roadmap
+                    </button>
+                </div>
+
+                <!-- DYNAMIC AI OUTPUT CONTAINER -->
+                <div id="aiOutputContainer" class="ai-output-container">
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <span id="aiSourceBadge" class="ai-source-badge">⚡ Groq AI (Llama-3.3 70B)</span>
+                        <small style="color: #666;">Generated dynamically for your profile &amp; target location</small>
+                    </div>
+
+                    <!-- 1. Executive Summary -->
+                    <div id="aiExecutiveSummary" class="executive-summary-card">
+                        <!-- Populated by script.js -->
+                    </div>
+
+                    <!-- 2. What to Study -->
+                    <h3 style="font-size: 20px; font-weight: 700; margin: 30px 0 16px; display: flex; align-items: center; gap: 8px;">
+                        📚 1. What to Study: Core Curriculum &amp; Toolkits
+                    </h3>
+                    <div id="aiWhatToStudyGrid" class="study-grid">
+                        <!-- Populated by script.js -->
+                    </div>
+
+                    <!-- 3. Recommended Courses -->
+                    <h3 style="font-size: 20px; font-weight: 700; margin: 30px 0 16px; display: flex; align-items: center; gap: 8px;">
+                        🎓 2. Recommended Courses &amp; Certifications
+                    </h3>
+                    <div id="aiCoursesGrid" class="courses-grid">
+                        <!-- Populated by script.js -->
+                    </div>
+
+                    <!-- 4. Study Roadmap -->
+                    <h3 style="font-size: 20px; font-weight: 700; margin: 30px 0 16px; display: flex; align-items: center; gap: 8px;">
+                        🗺️ 3. Phased 90-Day Step-by-Step Study Roadmap
+                    </h3>
+                    <div id="aiRoadmapTimeline" class="roadmap-timeline">
+                        <!-- Populated by script.js -->
+                    </div>
+
+                    <!-- 5. Location Insights -->
+                    <div id="aiLocationInsights" class="location-insights-card">
+                        <!-- Populated by script.js -->
+                    </div>
+
+                    <!-- 6. Recommended Projects -->
+                    <h3 style="font-size: 20px; font-weight: 700; margin: 30px 0 16px; display: flex; align-items: center; gap: 8px;">
+                        🛠️ 4. Recommended Capstone Projects to Build
+                    </h3>
+                    <div id="aiRecommendedProjects">
+                        <!-- Populated by script.js -->
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ====================================================
+                 TAB 2: LIVE AI CAREER COACH CHAT
+                 ==================================================== -->
+            <div id="tab-ai-chat" class="hub-pane">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h3>🤖 CampusAI Career Coach (Groq AI)</h3>
+                        <span class="card-category-badge">Real-Time Guidance</span>
+                    </div>
+
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="chat-bubble ai">
+                            Hello! 👋 I am your CampusAI Career &amp; Academic Mentor powered by Groq AI. 
+                            Ask me anything about:
+                            <ul>
+                                <li>Which courses to study for your major and dream role</li>
+                                <li>How to prepare for tech internships in Bangalore, Silicon Valley, or Remote</li>
+                                <li>What capstone projects will impress recruiters</li>
+                                <li>How to balance semester coursework with coding practice</li>
+                            </ul>
+                            What would you like to explore today?
+                        </div>
+                    </div>
+
+                    <div class="chat-input-bar">
+                        <input
+                            type="text"
+                            id="chatInput"
+                            placeholder="Type your study or career question here..."
+                            onkeydown="if(event.key === 'Enter') sendCareerChatMessage()"
+                        >
+                        <button class="btn-primary-action" onclick="sendCareerChatMessage()">
+                            Send 🚀
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====================================================
+                 TAB 3: MATCHING OPPORTUNITIES
+                 ==================================================== -->
+            <div id="tab-jobs" class="hub-pane">
+                <div style="margin-bottom: 25px; background: white; padding: 22px 28px; border-radius: 16px; box-shadow: var(--shadow-sm); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        <h3 style="color: #222; margin-bottom: 4px;">🎯 Opportunities Matching Your Profile</h3>
+                        <p style="color: #666; font-size: 14px;">Curated hackathons, internships, and scholarships aligned with your degree and location.</p>
+                    </div>
+                    <button class="btn-primary-action" style="width: auto; padding: 10px 20px;" onclick="window.location.href='opportunities.html'">
+                        Browse All Opportunities →
+                    </button>
+                </div>
+
+                <div id="jobList">
+                    <!-- Populated dynamically by script.js -->
+                </div>
+            </div>
+
+            <!-- ====================================================
+                 TAB 4: PROJECT SHOWCASE GALLERY
+                 ==================================================== -->
+            <div id="tab-showcase" class="hub-pane">
+                <div class="projects-top-bar">
+                    <div class="filter-pills" id="projectFilters">
+                        <button class="filter-pill active" onclick="filterProjects('All', this)">All Projects</button>
+                        <button class="filter-pill" onclick="filterProjects('Generative AI', this)">Generative AI</button>
+                        <button class="filter-pill" onclick="filterProjects('Web Dev', this)">Web Dev</button>
+                        <button class="filter-pill" onclick="filterProjects('Machine Learning', this)">Machine Learning</button>
+                    </div>
+
+                    <button class="btn-add-project" onclick="openPublishModal()">
+                        + Publish My Project
+                    </button>
+                </div>
+
+                <div class="project-grid" id="projectGrid">
+                    <!-- Projects populated dynamically by script.js -->
+                </div>
+            </div>
+
+            <!-- ====================================================
+                 TAB 5: AUTOMATED RESUME BENCHMARK & SCORER
+                 ==================================================== -->
+            <div id="tab-scorer" class="hub-pane">
+                <div class="scorer-card">
+                    <h2>📄 AI Resume &amp; Profile Scorer</h2>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 24px; text-align: center;">
+                        Benchmark your resume or technical background against top industry roles using Groq AI.
+                    </p>
+
+                    <div class="form-group">
+                        <label for="targetRole">Target Career Role</label>
+                        <select id="targetRole">
+                            <option value="Machine Learning Engineer" selected>Machine Learning Engineer</option>
+                            <option value="Full-Stack AI Software Engineer">Full-Stack AI Software Engineer</option>
+                            <option value="Data Scientist">Data Scientist / Analyst</option>
+                            <option value="Cloud &amp; DevOps Engineer">Cloud &amp; DevOps Engineer</option>
+                            <option value="Frontend / UI Engineer">Frontend / UI Engineer</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resumeText">Paste Resume Text or Project Summaries &amp; Skills</label>
+                        <textarea id="resumeText" rows="6" placeholder="Paste your resume sections, coursework, technical tools, and project summaries here..."></textarea>
+                    </div>
+
+                    <button id="btnScoreResume" class="btn-primary-action" onclick="scoreResumeWithAi()">
+                        ⚡ Benchmark My Resume with Groq AI
+                    </button>
+
+                    <!-- Score Result Panel -->
+                    <div id="scoreResultPanel" class="score-result-panel">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap;">
+                            <div>
+                                <span style="font-size: 13px; font-weight: bold; color: #666; text-transform: uppercase;">Alignment Score</span>
+                                <div id="scoreNumber" class="score-number">--/100</div>
+                            </div>
+                            <p id="scoreSummary" style="max-width: 500px; font-size: 14px; color: #444; line-height: 1.5;"></p>
+                        </div>
+
+                        <div style="margin: 20px 0;">
+                            <h4 style="margin-bottom: 8px;">✨ Identified Strengths</h4>
+                            <div id="scoreStrengths"></div>
+                        </div>
+
+                        <div style="margin: 20px 0;">
+                            <h4 style="margin-bottom: 8px;">⚠️ Recommended Skills to Add</h4>
+                            <div id="scoreMissing"></div>
+                        </div>
+
+                        <div style="margin: 20px 0;">
+                            <h4 style="margin-bottom: 8px;">🚀 Action Checklist for Recruiter Appeal</h4>
+                            <div id="scoreActions"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PUBLISH PROJECT MODAL -->
+    <div id="publishProjectModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>🚀 Publish Project to Showcase</h3>
+                <button class="modal-close-btn" onclick="closePublishModal()">✕</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="projTitle">Project Title</label>
+                <input type="text" id="projTitle" placeholder="e.g. AI Tutor &amp; Roadmap Generator">
+            </div>
+
+            <div class="form-group">
+                <label for="projCategory">Domain / Category</label>
+                <select id="projCategory">
+                    <option value="Generative AI">Generative AI</option>
+                    <option value="Machine Learning">Machine Learning</option>
+                    <option value="Web Dev">Web Dev</option>
+                    <option value="Cloud / DevOps">Cloud / DevOps</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="projDesc">Brief Description</label>
+                <textarea id="projDesc" rows="3" placeholder="Explain what problem your project solves and how it works..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="projTags">Tech Stack Tags</label>
+                <input type="text" id="projTags" placeholder="e.g. Groq, Python, FastAPI, React">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-group">
+                    <label for="projDemo">Live Demo URL</label>
+                    <input type="text" id="projDemo" placeholder="https://yourdemo.com">
+                </div>
+                <div class="form-group">
+                    <label for="projGithub">GitHub Repository</label>
+                    <input type="text" id="projGithub" placeholder="https://github.com/...">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="btn-primary-action" onclick="publishProject()" style="margin: 0; flex: 1;">
+                    Publish to Showcase
+                </button>
+                <button class="btn-nav-action btn-nav-outline" onclick="closePublishModal()" style="margin: 0;">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI PROCESSING OVERLAY -->
+    <div id="aiProcessingOverlay" class="ai-processing-overlay">
+        <div class="ai-processing-spinner-box">
+            <div class="ai-spinner-ring"></div>
+            <div class="ai-spinner-ring-inner"></div>
+            <div class="ai-spinner-icon">⚡</div>
+        </div>
+        <div class="ai-processing-title" id="aiProcessingTitle">Consulting Groq AI...</div>
+        <div class="ai-processing-subtitle" id="aiProcessingSubtitle">Analyzing your academic stage, target role, and location trends.</div>
+    </div>
+
+    <footer class="campus-footer">
+        <p>&copy; 2026 CampusAI. Groq-accelerated career planning and portfolio verification.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Prepopulate guide parameters from profile upon page load
+        document.addEventListener("DOMContentLoaded", () => {
+            const courseInput = document.getElementById("guideCourse");
+            const yearInput = document.getElementById("guideYear");
+            const placeInput = document.getElementById("guidePlace");
+            const roleInput = document.getElementById("guideRole");
+            const skillsInput = document.getElementById("guideSkills");
+
+            const savedCourse = localStorage.getItem("studentCourse");
+            const savedYear = localStorage.getItem("studentYear");
+            const savedPlace = localStorage.getItem("studentPlace");
+            const savedRole = localStorage.getItem("studentRole");
+            const savedSkills = localStorage.getItem("studentSkills");
+
+            if (courseInput && savedCourse) courseInput.value = savedCourse;
+            if (yearInput && savedYear) yearInput.value = savedYear;
+            if (placeInput && savedPlace) placeInput.value = savedPlace;
+            if (roleInput && savedRole) roleInput.value = savedRole;
+            if (skillsInput && savedSkills) skillsInput.value = savedSkills;
+        });
+    </script>
+</body>
+
+</html>

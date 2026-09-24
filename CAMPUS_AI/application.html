@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusAI - Submit Application</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <section class="application-section">
+        <h1>📝 Fast-Track Application</h1>
+        <p class="section-subtitle">
+            Submit your profile directly to the organizers. Information is pre-populated from your student profile.
+        </p>
+
+        <div class="application-box">
+            <div id="selectedOpportunity" style="background: #f0eeff; color: var(--primary); padding: 14px 18px; border-radius: 12px; margin-bottom: 20px; font-size: 15px; border: 1px solid var(--primary-border);">
+                Applying for opportunity...
+            </div>
+
+            <form onsubmit="event.preventDefault(); submitApplication();">
+                <div class="form-group">
+                    <label for="appName">Applicant Full Name</label>
+                    <input type="text" id="appName" placeholder="Full Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="appEmail">Email Address</label>
+                    <input type="email" id="appEmail" placeholder="Email Address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="appCollege">College / Institution</label>
+                    <input type="text" id="appCollege" placeholder="College Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="appSkills">Key Technical Skills &amp; Projects</label>
+                    <input type="text" id="appSkills" placeholder="e.g. Python, Machine Learning, Web Development">
+                </div>
+
+                <div class="form-group">
+                    <label for="appNote">Why are you interested in this opportunity? (Optional)</label>
+                    <textarea id="appNote" rows="3" placeholder="Brief note on what motivates you or what skills you hope to practice..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary-action">
+                    Submit Application Now 🚀
+                </button>
+
+                <button type="button" class="btn-secondary-action" onclick="window.location.href='opportunities.html'" style="margin-top: 10px;">
+                    ← Cancel &amp; Return
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="campus-footer">
+        <p>&copy; 2026 CampusAI. University Career Acceleration.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

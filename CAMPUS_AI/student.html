@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusAI - Student Profile &amp; Preferences</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <section class="student-section">
+        <h1>🎓 Student Profile &amp; Career Aspirations</h1>
+        <p class="section-subtitle">
+            Tell us about your academic foundation, target dream role, and geographic place of interest so Groq AI can generate your personalized study path.
+        </p>
+
+        <div class="profile-layout">
+
+            <!-- LEFT: COMPREHENSIVE STUDENT DETAILS FORM -->
+            <div class="student-box" style="margin: 0; max-width: 100%;">
+                <!-- Mandatory Profile Completion Notice Banner -->
+                <div id="mandatoryNotice" class="mandatory-onboarding-banner" style="display: none;">
+                    <span style="font-size: 26px;">⚠️</span>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <strong style="font-size: 15px; color: #9a3412;">Mandatory Profile Registration</strong>
+                            <span class="mandatory-badge">Required</span>
+                        </div>
+                        <p style="margin: 0; font-size: 13.5px; line-height: 1.5; color: #7c2d12;">
+                            Welcome to CampusAI! To access your dashboard, discover matching opportunities, and generate AI roadmaps, you must first complete all required student details below. This step cannot be skipped.
+                        </p>
+                    </div>
+                </div>
+
+                <h2 style="font-size: 20px; margin-bottom: 20px; color: var(--primary);">
+                    📋 Academic &amp; Career Details
+                </h2>
+
+                <div class="form-group">
+                    <label for="studentName">Full Name <span style="color: #e74c3c;">*</span></label>
+                    <input type="text" id="studentName" placeholder="e.g. Alex Johnson" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentCollege">College / University Name <span style="color: #e74c3c;">*</span></label>
+                    <input type="text" id="studentCollege" placeholder="e.g. Indian Institute of Technology / State University" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px;">
+                    <div class="form-group">
+                        <label for="studentCourse">Degree &amp; Branch / Major <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" id="studentCourse" placeholder="e.g. B.Tech Computer Science &amp; Engineering" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentYear">Current Year <span style="color: #e74c3c;">*</span></label>
+                        <select id="studentYear" required>
+                            <option value="1st Year">1st Year (Freshman)</option>
+                            <option value="2nd Year">2nd Year (Sophomore)</option>
+                            <option value="3rd Year" selected>3rd Year (Junior)</option>
+                            <option value="4th Year">4th Year (Senior)</option>
+                            <option value="Postgraduate / Masters">Masters / M.Tech / MS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label for="studentGpa">CGPA / Percentage</label>
+                        <input type="text" id="studentGpa" placeholder="e.g. 8.7 / 10 or 85%">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPlace">📍 Place of Interest (Target City) <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" id="studentPlace" placeholder="e.g. Bangalore, Hyderabad, Silicon Valley, Remote" required>
+                        <span class="field-hint">Where you want to intern or work</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentRole">🎯 Target Dream Career Role <span style="color: #e74c3c;">*</span></label>
+                    <input type="text" id="studentRole" placeholder="e.g. AI / Machine Learning Engineer, Full-Stack Developer, Data Scientist" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentSkills">🛠️ Current Technical Skills <span style="color: #e74c3c;">*</span></label>
+                    <input type="text" id="studentSkills" placeholder="e.g. Python, C++, React, PyTorch, Node.js, SQL" required>
+                    <span class="field-hint">Comma separated list of languages and tools you know</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentInterests">💡 Learning Interests &amp; Domains</label>
+                    <input type="text" id="studentInterests" placeholder="e.g. Generative AI, Cloud Microservices, Deep Learning">
+                </div>
+
+                <div class="form-group">
+                    <label for="studentGoals">🚀 Long-Term Career Vision</label>
+                    <textarea id="studentGoals" rows="3" placeholder="e.g. Secure a high-impact role at a Tier-1 tech firm or fast-paced AI startup, master system design, and build production AI products."></textarea>
+                </div>
+
+                <button type="button" class="btn-primary-action" onclick="saveStudentDetails()">
+                    💾 Save Profile &amp; Launch AI Study Advisor →
+                </button>
+            </div>
+
+            <!-- RIGHT: PROOF VAULT & ACHIEVEMENTS -->
+            <div class="achievement-box">
+                <h2>🏆 Proof Vault &amp; Campus Profile</h2>
+                <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
+                    Upload verifiable credentials to boost your profile score and stand out to campus recruiters.
+                </p>
+
+                <!-- STATS COUNTERS -->
+                <div class="achievement-stats">
+                    <div class="stat-item">
+                        <h3 id="hackathonCount">0</h3>
+                        <p>Hackathons</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 id="certificateCount">0</h3>
+                        <p>Certs</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 id="projectCount">0</h3>
+                        <p>Projects</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 id="workshopCount">0</h3>
+                        <p>Workshops</p>
+                    </div>
+                </div>
+
+                <!-- ACTIVE LEVEL BADGE -->
+                <div class="level-card">
+                    <div>
+                        <h4>Current Campus Level</h4>
+                        <p id="studentLevel">Tech Explorer 🚀</p>
+                    </div>
+                    <span style="font-size: 32px;">🌟</span>
+                </div>
+
+                <!-- VAULT ACTION BUTTONS -->
+                <div class="vault-actions-grid">
+                    <button class="vault-btn" onclick="openUpload('Hackathon')">
+                        💻 + Hackathon
+                    </button>
+                    <button class="vault-btn" onclick="openUpload('Certification')">
+                        📜 + Certificate
+                    </button>
+                    <button class="vault-btn" onclick="openUpload('Project')">
+                        🛠️ + Project
+                    </button>
+                    <button class="vault-btn" onclick="openUpload('Workshop')">
+                        🎓 + Workshop
+                    </button>
+                </div>
+
+                <!-- PROOF VAULT UPLOAD MODAL OVERLAY -->
+                <div id="uploadModal" class="modal-overlay">
+                    <div class="modal-box">
+                        <div class="modal-header">
+                            <h3 id="uploadTitle">🏆 Upload Proof Document</h3>
+                            <button type="button" class="modal-close-btn" onclick="closeUploadModal()" aria-label="Close modal">✕</button>
+                        </div>
+                        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
+                            Attach your verified certificate, hackathon credential, or project details to build your campus proof vault.
+                        </p>
+                        <div class="form-group">
+                            <label for="achievementName">Achievement / Credential Title</label>
+                            <input type="text" id="achievementName" placeholder="e.g. Smart India Hackathon Finalist">
+                        </div>
+                        <div class="form-group">
+                            <label for="organization">Issuing Organization / Host</label>
+                            <input type="text" id="organization" placeholder="e.g. Coursera / IEEE / Google / Ministry of Education">
+                        </div>
+                        <div class="form-group">
+                            <label for="achievementYear">Year Completed / Awarded</label>
+                            <input type="text" id="achievementYear" placeholder="e.g. 2026">
+                        </div>
+                        <div class="form-group">
+                            <label for="achievementFile">Certificate File (Optional)</label>
+                            <input type="file" id="achievementFile" accept=".pdf,.png,.jpg,.jpeg">
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button type="button" class="btn-primary-action" onclick="saveAchievement()" style="margin: 0; flex: 1;">
+                                Save to Vault
+                            </button>
+                            <button type="button" class="btn-nav-action btn-nav-outline" onclick="closeUploadModal()" style="margin: 0;">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 16px; margin: 20px 0 10px;">📜 Uploaded Proofs &amp; Badges</h3>
+                <div id="achievementList" class="achievement-list">
+                    <!-- Populated dynamically by script.js -->
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="campus-footer">
+        <p>&copy; 2026 CampusAI. Real-time student profile sync &amp; verification with Supabase.</p>
+    </footer>
+
+    <!-- Supabase Client & Config -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseConfig.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusAI - Choose Your Opportunity Interest</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <section class="auth-section">
+        <h1>🎯 What are you looking to explore?</h1>
+        <p class="section-subtitle">
+            Choose your primary interest so CampusAI can filter the best verified opportunities tailored to your degree.
+        </p>
+
+        <div class="auth-box" style="max-width: 480px;">
+            <button onclick="selectInterest('Hackathon')">
+                💻 Hackathons &amp; Sprints
+            </button>
+
+            <button onclick="selectInterest('Internship')">
+                🚀 Industry Internships
+            </button>
+
+            <button onclick="selectInterest('Workshop')">
+                🎓 Skill Workshops &amp; Masterclasses
+            </button>
+
+            <button onclick="selectInterest('Competition')">
+                🏆 Tech Competitions &amp; Grants
+            </button>
+
+            <button onclick="selectInterest('Scholarship')">
+                💰 Research &amp; Academic Scholarships
+            </button>
+
+            <button class="btn-secondary-action" onclick="selectInterest('All')" style="margin-top: 20px;">
+                ✨ Browse All Opportunities
+            </button>
+        </div>
+    </section>
+
+    <footer class="campus-footer">
+        <p>&copy; 2026 CampusAI. University Opportunity Matching.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

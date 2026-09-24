@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusAI - AI Recommendations</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <section class="auth-section">
+        <h1>🤖 AI Matched Opportunities</h1>
+        <p class="section-subtitle">
+            Curated opportunities and recommended course paths tailored to your degree and target location.
+        </p>
+
+        <div class="auth-box" style="max-width: 550px;">
+            <h2 style="font-size: 20px; color: var(--primary); margin-bottom: 12px;">
+                ✨ Recommended for You
+            </h2>
+
+            <div id="recommendationResult" style="padding: 16px; background: #fbfaff; border: 1px solid var(--primary-border); border-radius: 12px; margin-bottom: 20px;">
+                <!-- Populated dynamically -->
+            </div>
+
+            <button type="button" class="btn-primary-action" onclick="window.location.href='career-hub.html'">
+                ⚡ Open Full AI Career &amp; Study Advisor →
+            </button>
+
+            <button type="button" class="btn-secondary-action" onclick="window.location.href='opportunities.html'" style="margin-top: 10px;">
+                🚀 Browse Opportunity Catalog
+            </button>
+        </div>
+    </section>
+
+    <footer class="campus-footer">
+        <p>&copy; 2026 CampusAI. University Career Acceleration.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const res = document.getElementById("recommendationResult");
+            const course = localStorage.getItem("studentCourse") || "Engineering";
+            const role = localStorage.getItem("studentRole") || "AI Engineer";
+            const place = localStorage.getItem("studentPlace") || "Bangalore / Remote";
+
+            if (res) {
+                res.innerHTML = `
+                    <h3 style="font-size: 17px; margin-bottom: 6px;">🤖 AI Innovation Hackathon &amp; Internship Sprint</h3>
+                    <p style="color: #555; font-size: 14px; line-height: 1.6;">
+                        Recommended for your <strong>${course}</strong> track targeting <strong>${role}</strong> in <strong>${place}</strong>.
+                    </p>
+                `;
+            }
+        });
+    </script>
+</body>
+
+</html>

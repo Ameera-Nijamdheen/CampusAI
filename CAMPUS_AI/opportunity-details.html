@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusAI - Opportunity Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <section class="details-section">
+        <div class="details-card">
+            <div id="detailIcon" class="detail-icon">🚀</div>
+            <h1 id="detailTitle">Opportunity Details</h1>
+            <p id="detailDescription" class="detail-description"></p>
+
+            <div id="detailInfo" class="detail-info">
+                <!-- Populated dynamically by script.js -->
+            </div>
+
+            <div id="detailSkillsBox" class="skills-box">
+                <!-- Populated dynamically by script.js -->
+            </div>
+
+            <div class="details-buttons" style="margin-top: 25px; display: flex; gap: 12px; flex-wrap: wrap;">
+                <button type="button" class="btn-primary-action" onclick="applyForSelectedOpportunity()" style="flex: 1; margin: 0;">
+                    📝 Apply for Opportunity →
+                </button>
+                <button type="button" class="btn-secondary-action" onclick="window.location.href='opportunities.html'" style="flex: 1; margin: 0;">
+                    ← Back to Opportunities
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="campus-footer">
+        <p>&copy; 2026 CampusAI. University Career Acceleration.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
