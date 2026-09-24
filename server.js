@@ -380,12 +380,15 @@ app.post('/api/projects', authenticateToken, (req, res) => {
     }
 });
 
-// Public Supabase configuration endpoint (safely exposes public URL and anon key)
+// Public Supabase configuration endpoint
+// ONLY the URL and publishable (anon) key are exposed — service key stays server-side
 app.get('/api/config/supabase', (req, res) => {
-    res.json({
-        url: process.env.SUPABASE_URL || "",
-        anonKey: process.env.SUPABASE_ANON_KEY || ""
-    });
+    const url = process.env.SUPABASE_URL || "";
+    const anonKey = process.env.SUPABASE_ANON_KEY || "";
+    if (!url || !anonKey) {
+        return res.json({ configured: false, url: "", anonKey: "" });
+    }
+    res.json({ configured: true, url, anonKey });
 });
 
 // Clean root handler

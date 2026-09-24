@@ -3,6 +3,8 @@
 // Credentials auto-loaded from backend /api/config/supabase
 // ==========================================================
 
+// Project: Ameera-Nijamdheen's Supabase Project
+// URL and key are loaded at runtime from /api/config/supabase (reads from .env)
 window.CAMPUS_AI_SUPABASE_CONFIG = { url: "", anonKey: "" };
 let supabaseClient = null;
 
@@ -34,19 +36,28 @@ async function loadSupabaseConfig() {
 function getSupabase() {
     if (supabaseClient) return supabaseClient;
     const { url, anonKey } = window.CAMPUS_AI_SUPABASE_CONFIG;
-    if (window.supabase && url && anonKey && !url.includes("your-project-id")) {
+    if (window.supabase && url && anonKey && isValidSupabaseConfig(url, anonKey)) {
         try {
             supabaseClient = window.supabase.createClient(url, anonKey);
-            window.supabaseClient = supabaseClient; // expose globally
+            window.supabaseClient = supabaseClient;
+            console.log("✅ Supabase client initialized:", url);
             return supabaseClient;
-        } catch (e) { console.warn("Supabase init:", e); }
+        } catch (e) { console.error("Supabase init error:", e); }
     }
     return null;
 }
 
+function isValidSupabaseConfig(url, key) {
+    if (!url || !key) return false;
+    if (url.includes("your-project-id")) return false;
+    // Accept both new publishable keys (sb_publishable_...) and legacy JWT keys (eyJ...)
+    const validKey = key.startsWith("sb_publishable_") || key.startsWith("sb_secret_") || key.startsWith("eyJ");
+    return validKey;
+}
+
 function isSupabaseConfigured() {
     const { url, anonKey } = window.CAMPUS_AI_SUPABASE_CONFIG;
-    return !!(url && anonKey && !url.includes("your-project-id") && !anonKey.includes("your-supabase"));
+    return !!(url && anonKey && isValidSupabaseConfig(url, anonKey));
 }
 
 // Google Sign-In via Supabase OAuth
