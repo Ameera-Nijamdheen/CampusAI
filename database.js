@@ -2,12 +2,15 @@ const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 
-const DB_DIR = path.join(__dirname, 'data');
+// Vercel has a read-only filesystem; use /tmp for writable storage
+const IS_VERCEL = !!process.env.VERCEL;
+const DB_DIR = IS_VERCEL ? path.join('/tmp', 'data') : path.join(__dirname, 'data');
 const DB_FILE = path.join(DB_DIR, 'campusai_db.json');
 
 if (!fs.existsSync(DB_DIR)) {
     fs.mkdirSync(DB_DIR, { recursive: true });
 }
+
 
 // Initial Seeds
 const DEFAULT_OPPORTUNITIES = [
