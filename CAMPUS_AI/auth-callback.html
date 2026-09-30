@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusAI – Signing you in…</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 24px;
+        }
+        .callback-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 24px; padding: 48px 40px;
+            text-align: center; max-width: 380px; width: 100%;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+            animation: fadeInUp 0.5s ease both;
+        }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+        .spinner-ring {
+            width: 64px; height: 64px; margin: 0 auto 24px;
+            border-radius: 50%;
+            border: 4px solid rgba(108,92,231,0.2);
+            border-top-color: #6c5ce7;
+            animation: spin 0.9s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .callback-title { font-family:'Poppins',sans-serif; font-size:20px; font-weight:800; color:#fff; margin-bottom:8px; }
+        .callback-sub { color:rgba(255,255,255,0.55); font-size:14px; line-height:1.5; }
+        .callback-logo { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:28px; }
+        .callback-logo-icon { width:44px; height:44px; background:linear-gradient(135deg,#6c5ce7,#a29bfe); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+        .callback-logo-text { font-family:'Poppins',sans-serif; font-size:22px; font-weight:800; color:#fff; }
+        .status-msg { margin-top:16px; padding:10px 16px; border-radius:10px; font-size:13px; font-weight:600; display:none; }
+        .status-msg.error { background:rgba(214,48,49,0.15); border:1px solid rgba(214,48,49,0.35); color:#ff7675; display:block; }
+        .status-msg.success { background:rgba(0,184,148,0.15); border:1px solid rgba(0,184,148,0.35); color:#55efc4; display:block; }
+    </style>
+</head>
+<body>
+    <div class="callback-card">
+        <div class="callback-logo">
+            <div class="callback-logo-icon">🎓</div>
+            <span class="callback-logo-text">CampusAI</span>
+        </div>
+        <div class="spinner-ring"></div>
+        <div class="callback-title" id="callbackTitle">Verifying your account…</div>
+        <div class="callback-sub" id="callbackSub">Please wait while we complete your sign-in.</div>
+        <div class="status-msg" id="statusMsg"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseConfig.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // This page handles the Google OAuth redirect callback
+        // supabaseConfig.js boot will detect the session and call handleSupabaseSession()
+        // which will then show the profile overlay or redirect to career-hub.html
+
+        // Fallback: if nothing happens in 5s, redirect to login
+        const fallbackTimer = setTimeout(() => {
+            document.getElementById('callbackTitle').textContent = 'Taking longer than expected…';
+            document.getElementById('callbackSub').textContent = 'Redirecting you to login…';
+            setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+        }, 7000);
+
+        // Listen for session to be established
+        window.addEventListener('campusai:session-ready', () => {
+            clearTimeout(fallbackTimer);
+            document.getElementById('callbackTitle').textContent = 'Signed in! ✅';
+            document.getElementById('callbackSub').textContent = 'Setting up your dashboard…';
+        });
+
+        // Check for error in URL hash
+        const hash = window.location.hash;
+        if (hash && hash.includes('error=')) {
+            clearTimeout(fallbackTimer);
+            const params = new URLSearchParams(hash.replace('#', '?'));
+            const errMsg = params.get('error_description') || params.get('error') || 'Authentication failed.';
+            document.getElementById('callbackTitle').textContent = 'Sign-in failed';
+            document.getElementById('callbackSub').textContent = 'Redirecting you back to login…';
+            const msgEl = document.getElementById('statusMsg');
+            msgEl.textContent = decodeURIComponent(errMsg.replace(/\+/g, ' '));
+            msgEl.className = 'status-msg error';
+            setTimeout(() => { window.location.href = 'login.html'; }, 3000);
+        }
+    </script>
+</body>
+</html>

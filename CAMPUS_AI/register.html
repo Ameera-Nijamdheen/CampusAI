@@ -4,20 +4,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusAI - Student Registration</title>
+    <title>CampusAI – Create Student Account</title>
+    <meta name="description" content="Join CampusAI with your Google account. Get AI-powered career guidance, discover internships, and build your student portfolio.">
     <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); min-height: 100vh; display: flex; flex-direction: column; }
+
+        .auth-hero { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; position: relative; overflow: hidden; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; animation: orbFloat 8s ease-in-out infinite alternate; }
+        .orb-1 { width: 380px; height: 380px; background: #a29bfe; top: -100px; right: -80px; }
+        .orb-2 { width: 280px; height: 280px; background: #fd79a8; bottom: -60px; left: -60px; animation-delay: -4s; }
+        .orb-3 { width: 180px; height: 180px; background: #00cec9; top: 50%; right: 20%; animation-delay: -2s; }
+        @keyframes orbFloat { 0%{transform:translateY(0) scale(1);} 100%{transform:translateY(-28px) scale(1.06);} }
+
+        .auth-card {
+            position: relative; z-index: 2;
+            width: 100%; max-width: 480px;
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 28px; padding: 48px 44px 40px;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.45);
+            animation: fadeInUp 0.55s cubic-bezier(0.4,0,0.2,1) both;
+        }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+
+        .auth-logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 30px; }
+        .auth-logo-icon { width: 52px; height: 52px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 8px 24px rgba(108,92,231,0.5); }
+        .auth-logo-text { font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 800; color: #fff; }
+        .auth-logo-tag { background: rgba(162,155,254,0.25); color: #a29bfe; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(162,155,254,0.4); margin-left: 4px; text-transform: uppercase; }
+
+        .auth-heading { color: #fff; font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 6px; font-family: 'Poppins', sans-serif; }
+        .auth-sub { color: rgba(255,255,255,0.55); font-size: 14px; text-align: center; margin-bottom: 32px; line-height: 1.5; }
+
+        /* Steps indicator */
+        .steps-indicator { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 30px; }
+        .step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .step-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; border: 2px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); }
+        .step.active .step-dot { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 4px 16px rgba(108,92,231,0.5); }
+        .step.done .step-dot { background: #00b894; border-color: #00b894; color: #fff; }
+        .step-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.5px; }
+        .step.active .step-label { color: #a29bfe; }
+        .step.done .step-label { color: #00b894; }
+        .step-line { width: 40px; height: 2px; background: rgba(255,255,255,0.1); margin: 0 6px; margin-bottom: 20px; }
+        .step-line.done { background: #00b894; }
+
+        .btn-google {
+            display: flex; align-items: center; justify-content: center; gap: 14px;
+            width: 100%; padding: 15px 20px;
+            background: #fff; color: #333;
+            border: none; border-radius: 14px;
+            font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .btn-google:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(0,0,0,0.35); }
+        .btn-google:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+        .process-steps {
+            display: flex; flex-direction: column; gap: 10px; margin-top: 24px;
+        }
+        .process-step {
+            display: flex; align-items: center; gap: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; padding: 12px 14px;
+        }
+        .process-step-num { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #6c5ce7, #a29bfe); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; }
+        .process-step-text { color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.4; }
+        .process-step-text strong { color: #fff; }
+
+        .auth-divider { display: flex; align-items: center; gap: 12px; margin: 24px 0; }
+        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.12); }
+        .auth-divider span { color: rgba(255,255,255,0.35); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        .login-link { text-align: center; margin-top: 20px; }
+        .login-link p { color: rgba(255,255,255,0.45); font-size: 13px; margin-bottom: 8px; }
+        .btn-login-link { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,184,148,0.15); border: 1px solid rgba(0,184,148,0.35); color: #00b894; padding: 10px 22px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-login-link:hover { background: rgba(0,184,148,0.25); color: #fff; transform: translateY(-1px); }
+
+        .auth-footer-note { text-align: center; margin-top: 24px; color: rgba(255,255,255,0.3); font-size: 11.5px; line-height: 1.6; }
+        .auth-footer-note a { color: rgba(162,155,254,0.7); text-decoration: underline; }
+        .page-footer { background: transparent; color: rgba(255,255,255,0.22); text-align: center; padding: 16px; font-size: 12px; }
+    </style>
 </head>
 
 <body>
 
-    <section class="register-section">
-        <h1>📝 Create Student Account</h1>
-        <p class="section-subtitle">Unlock AI career guidance, discover matching internships, and track your achievements.</p>
+    <div class="auth-hero">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
 
-        <div class="register-box">
-            <!-- Google OAuth Sign-in Button -->
-            <button type="button" class="btn-google-auth" onclick="signInWithGoogle()" id="googleRegisterBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <div class="auth-logo-icon">🎓</div>
+                <div>
+                    <span class="auth-logo-text">CampusAI</span>
+                    <span class="auth-logo-tag">AI 2.0</span>
+                </div>
+            </div>
+
+            <!-- Process Steps -->
+            <div class="steps-indicator">
+                <div class="step active">
+                    <div class="step-dot">1</div>
+                    <div class="step-label">Sign Up</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-dot">2</div>
+                    <div class="step-label">Verify</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-dot">3</div>
+                    <div class="step-label">Profile</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-dot">4</div>
+                    <div class="step-label">Dashboard</div>
+                </div>
+            </div>
+
+            <h1 class="auth-heading">Create your account</h1>
+            <p class="auth-sub">Join thousands of students accelerating their campus careers with AI-powered guidance.</p>
+
+            <!-- Google Sign-Up -->
+            <button type="button" class="btn-google" id="googleRegisterBtn" onclick="handleGoogleSignUp()">
+                <svg width="22" height="22" viewBox="0 0 24 24">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
@@ -26,68 +143,66 @@
                 <span>Sign up with Google</span>
             </button>
 
-            <div class="auth-divider">
-                <span>OR REGISTER WITH EMAIL</span>
+            <div class="auth-divider"><span>How it works</span></div>
+
+            <!-- Registration process steps -->
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="process-step-num">1</div>
+                    <div class="process-step-text"><strong>Sign up with Google</strong> — Quick, secure, no password needed.</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-num">2</div>
+                    <div class="process-step-text"><strong>Verify your email</strong> — We send a confirmation link to your Gmail.</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-num">3</div>
+                    <div class="process-step-text"><strong>Complete your profile</strong> — Required before accessing the platform.</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-num">4</div>
+                    <div class="process-step-text"><strong>Access your AI dashboard</strong> — Personalized career guidance starts here.</div>
+                </div>
             </div>
 
-            <form onsubmit="event.preventDefault(); registerUser();">
-                <div class="form-group">
-                    <label for="registerName">Full Name</label>
-                    <input
-                        type="text"
-                        id="registerName"
-                        placeholder="e.g. Alex Johnson"
-                        autocomplete="name"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="registerEmail">University or Personal Email</label>
-                    <input
-                        type="email"
-                        id="registerEmail"
-                        placeholder="alex@university.edu"
-                        autocomplete="email"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="registerPassword">Create Password</label>
-                    <input
-                        type="password"
-                        id="registerPassword"
-                        placeholder="At least 6 characters"
-                        autocomplete="new-password"
-                        required
-                        minlength="6"
-                    >
-                    <span class="field-hint">Use 6 or more characters with letters &amp; numbers.</span>
-                </div>
-
-                <button type="submit">
-                    Create Account &amp; Setup Profile →
-                </button>
-            </form>
-
-            <div style="text-align: center; margin-top: 24px;">
-                <p style="font-size: 14px; color: #666; margin-bottom: 8px;">Already have an account?</p>
-                <button type="button" class="btn-secondary-action" onclick="window.location.href='login.html'" style="margin-top: 0;">
-                    🔐 Login
+            <!-- Login link -->
+            <div class="login-link">
+                <p>Already have a CampusAI account?</p>
+                <button type="button" class="btn-login-link" onclick="window.location.href='login.html'">
+                    🔐 Sign In Instead
                 </button>
             </div>
+
+            <p class="auth-footer-note">
+                By creating an account you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a>.<br>
+                We only access your Google name and email.
+            </p>
         </div>
-    </section>
+    </div>
 
-    <footer class="campus-footer">
-        <p>&copy; 2026 CampusAI. University Career Acceleration with Supabase &amp; Google Auth.</p>
+    <footer class="page-footer">
+        &copy; 2026 CampusAI. University Career Acceleration with Google OAuth &amp; Supabase.
     </footer>
 
-    <!-- Supabase JS Client & Auth Integration -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabaseConfig.js"></script>
     <script src="script.js"></script>
+    <script>
+        async function handleGoogleSignUp() {
+            const btn = document.getElementById('googleRegisterBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="3" fill="none"/><path d="M12 2 A10 10 0 0 1 22 12" stroke="#6c5ce7" stroke-width="3" fill="none"/></svg><span>Redirecting to Google…</span>`;
+            try {
+                await signInWithGoogle();
+            } catch(e) {
+                btn.disabled = false;
+                btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/></svg><span>Sign up with Google</span>`;
+            }
+        }
+    </script>
+    <style>
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
 </body>
 
 </html>

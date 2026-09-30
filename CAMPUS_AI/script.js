@@ -102,14 +102,19 @@ function isProfileCompleted() {
 
 // --- STRICT AUTHENTICATION & MANDATORY ONBOARDING WALL ---
 // 1. Unauthenticated users cannot access members-only pages
-// 2. Authenticated users with incomplete profiles CANNOT skip registration details
+// 2. Authenticated users with incomplete profiles see mandatory overlay (handled by supabaseConfig.js)
 function enforceAuthWall() {
     const path = window.location.pathname;
-    const isPublicPage = path.endsWith("login.html") || path.endsWith("register.html");
+    const isPublicPage =
+        path.endsWith("login.html") ||
+        path.endsWith("register.html") ||
+        path.endsWith("auth-callback.html") ||
+        path.endsWith("index.html") ||
+        path === "/" || path === "";
     const token = getAuthToken();
     const user = getStoredUser();
 
-    // Not logged in -> redirect to login
+    // Not logged in -> redirect to login (but let supabase OAuth callback through)
     if (!isPublicPage && (!token || !user)) {
         const page = path.split("/").pop() || "index.html";
         sessionStorage.setItem("campusai_login_prompt", "Please log in to access CampusAI.");
@@ -118,12 +123,12 @@ function enforceAuthWall() {
         return false;
     }
 
-    // Logged in, but profile is incomplete -> strictly gate to student.html
+    // Logged in but profile incomplete → supabaseConfig.js handles the overlay,
+    // but also hard-redirect as a fallback (except on student.html)
     if (!isPublicPage && token && user && !path.endsWith("student.html")) {
         if (!isProfileCompleted()) {
-            sessionStorage.setItem("campusai_login_prompt", "Profile completion is mandatory before accessing CampusAI features.");
-            window.location.replace("student.html?mandatory=true");
-            return false;
+            // Overlay will appear via supabaseConfig.js — don't redirect yet
+            // Allow page to load, overlay fires after 500ms
         }
     }
 
@@ -342,178 +347,25 @@ function closeMobileNav() {
 // 2. AUTHENTICATION (REGISTER & LOGIN & LOGOUT)
 // ==========================================================
 
-async function registerUser() {
-    const nameInput = document.getElementById("registerName");
-    const emailInput = document.getElementById("registerEmail");
-    const passwordInput = document.getElementById("registerPassword");
-    const submitBtn = document.querySelector(".register-box button[type='submit'], .register-box button");
-
-    if (!nameInput || !emailInput || !passwordInput) return;
-
-    const name = nameInput.value.trim();
-    const email = emailInput.value.trim().toLowerCase();
-    const password = passwordInput.value.trim();
-
-    if (!name || !email || !password) {
-        showToast("Please fill in all registration fields.", "error");
-        return;
-    }
-
-    if (!email.includes("@") || !email.includes(".")) {
-        showToast("Please enter a valid email address.", "error");
-        return;
-    }
-
-    if (password.length < 6) {
-        showToast("Password should be at least 6 characters long.", "error");
-        return;
-    }
-
-    try {
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Creating Account...";
-        }
-
-        const res = await apiFetch("/api/auth/register", {
-            method: "POST",
-            body: JSON.stringify({ name, email, password })
-        });
-
-        setAuthToken(res.token);
-        setStoredUser(res.user);
-        localStorage.removeItem("campusai_profile_completed");
-        localStorage.setItem("studentName", res.user.name);
-
-        showToast("Account created! Please complete your required registration details. 📝", "success");
-
-        setTimeout(() => {
-            window.location.href = "student.html?mandatory=true";
-        }, 700);
-    } catch (err) {
-        showToast(err.message, "error");
-    } finally {
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Create Account & Setup Profile →";
-        }
-    }
+// Registration via Google OAuth (handled by supabaseConfig.js → signInWithGoogle())
+// Email/password registration removed — Google Auth only
+function registerUser() {
+    showToast("Please use Google Sign-Up above.", "info");
 }
 
-async function loginUser() {
-    const emailInput = document.getElementById("loginEmail");
-    const passwordInput = document.getElementById("loginPassword");
-    const submitBtn = document.querySelector(".auth-box button[type='submit'], .auth-box button");
-
-    if (!emailInput || !passwordInput) return;
-
-    const email = emailInput.value.trim().toLowerCase();
-    const password = passwordInput.value.trim();
-
-    if (!email || !password) {
-        showToast("Please enter your email and password.", "error");
-        return;
-    }
-
-    try {
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Logging in...";
-        }
-
-        const res = await apiFetch("/api/auth/login", {
-            method: "POST",
-            body: JSON.stringify({ email, password })
-        });
-
-        setAuthToken(res.token);
-        setStoredUser(res.user);
-
-        // Check if user has complete required profile details
-        const profile = res.profile;
-        const isComplete = (profile && profile.college && profile.course && profile.year && profile.skills && profile.targetRole &&
-            profile.college.trim() !== "" && profile.course.trim() !== "" && profile.year.trim() !== "" && profile.skills.trim() !== "");
-
-        if (isComplete) {
-            localStorage.setItem("campusai_profile_completed", "true");
-            localStorage.setItem("studentName", profile.fullName || res.user.name);
-            localStorage.setItem("studentCollege", profile.college);
-            localStorage.setItem("studentCourse", profile.course);
-            localStorage.setItem("studentYear", profile.year);
-            localStorage.setItem("studentRole", profile.targetRole);
-            localStorage.setItem("studentSkills", profile.skills);
-            localStorage.setItem("studentPlace", profile.placeOfInterest || "");
-        } else {
-            localStorage.removeItem("campusai_profile_completed");
-            if (profile && profile.fullName) {
-                localStorage.setItem("studentName", profile.fullName);
-            } else if (res.user && res.user.name) {
-                localStorage.setItem("studentName", res.user.name);
-            }
-        }
-
-        if (isComplete) {
-            showToast("Login successful! Welcome back. 🎉", "success");
-            const urlParams = new URLSearchParams(window.location.search);
-            const redirectTarget = urlParams.get("redirect") || "career-hub.html";
-            setTimeout(() => {
-                window.location.href = redirectTarget;
-            }, 600);
-        } else {
-            showToast("Login successful! Please complete your required profile details to continue. 📝", "info");
-            setTimeout(() => {
-                window.location.href = "student.html?mandatory=true";
-            }, 700);
-        }
-    } catch (err) {
-        showToast(err.message, "error");
-    } finally {
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Login to CampusAI →";
-        }
-    }
+// Login via Google OAuth (handled by supabaseConfig.js → signInWithGoogle())
+// Email/password login removed — Google Auth only
+function loginUser() {
+    showToast("Please use the Google Sign-In button above.", "info");
 }
 
-// Prompt for quick Supabase credentials setup
+// Kept for backward compat — not used in new UI
 function promptSupabaseKeys() {
-    const currentUrl = localStorage.getItem("custom_supabase_url") || "";
-    const currentKey = localStorage.getItem("custom_supabase_anon_key") || "";
-
-    const url = prompt(
-        "⚡ Connect Supabase & Google Sign-In\n\nEnter your Supabase Project URL (e.g., https://yourproject.supabase.co):",
-        currentUrl
-    );
-    if (!url) return;
-
-    const key = prompt(
-        "Enter your Supabase 'anon public' API Key:",
-        currentKey
-    );
-    if (!key) return;
-
-    localStorage.setItem("custom_supabase_url", url.trim());
-    localStorage.setItem("custom_supabase_anon_key", key.trim());
-
-    if (window.CAMPUS_AI_SUPABASE_CONFIG) {
-        window.CAMPUS_AI_SUPABASE_CONFIG.url = url.trim();
-        window.CAMPUS_AI_SUPABASE_CONFIG.anonKey = key.trim();
-    }
-
-    showToast("Supabase keys saved! Initializing Google Auth...", "success");
-    setTimeout(() => {
-        window.location.reload();
-    }, 800);
+    showToast("Supabase is configured via .env on the server.", "info");
 }
 
 function quickDemoLogin() {
-    const emailInput = document.getElementById("loginEmail");
-    const passwordInput = document.getElementById("loginPassword");
-    if (emailInput && passwordInput) {
-        emailInput.value = "demo@campusai.com";
-        passwordInput.value = "password123";
-        loginUser();
-    }
+    showToast("Demo login removed. Please use Google Sign-In.", "info");
 }
 
 function logoutUser() {
@@ -853,6 +705,121 @@ async function saveStudentDetails() {
     setTimeout(() => {
         window.location.href = "career-hub.html";
     }, 700);
+}
+
+// ==========================================================
+// PORTFOLIO STRENGTH ANALYZER
+// ==========================================================
+
+async function analyzeMyPortfolio() {
+    const btn = document.getElementById("btnAnalyzePortfolio");
+    const panel = document.getElementById("portfolioAnalysisPanel");
+    const emptyState = document.getElementById("portfolioEmptyState");
+
+    if (!btn) return;
+
+    if (!getAuthToken()) {
+        showToast("Please log in to analyze your portfolio.", "error");
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = `<span style="display:inline-block;animation:spin 1s linear infinite;">⚙️</span> Analyzing...`;
+
+    try {
+        const analysis = await apiFetch("/api/ai/portfolio-analysis");
+
+        // Hide empty state, show panel
+        if (emptyState) emptyState.style.display = "none";
+        if (panel) panel.style.display = "block";
+
+        const score = Math.round(analysis.overallScore || 0);
+
+        // --- Score Ring (conic-gradient) ---
+        const ring = document.getElementById("portfolioScoreRing");
+        const scoreNum = document.getElementById("portfolioScoreNum");
+        const gradeEl = document.getElementById("portfolioGradeBadge");
+        const headlineEl = document.getElementById("portfolioHeadline");
+        const sourceEl = document.getElementById("portfolioSource");
+
+        const gradeColors = { A: "#00b894", B: "#6c5ce7", C: "#fdcb6e", D: "#e17055" };
+        const color = gradeColors[analysis.grade] || "#8854d0";
+
+        if (ring) ring.style.background = `conic-gradient(${color} ${score * 3.6}deg, #e0d7ff 0deg)`;
+        if (scoreNum) scoreNum.textContent = score;
+        if (gradeEl) {
+            gradeEl.textContent = `Grade ${analysis.grade || "--"}`;
+            gradeEl.style.background = color;
+        }
+        if (headlineEl) headlineEl.textContent = analysis.headline || "Analysis complete";
+        if (sourceEl) sourceEl.textContent = `⚡ ${analysis.source || "CampusAI Engine"}`;
+
+        // --- Category Scores ---
+        const catEl = document.getElementById("portfolioCategories");
+        if (catEl && Array.isArray(analysis.categories)) {
+            catEl.innerHTML = analysis.categories.map(cat => {
+                const pct = Math.round(cat.score || 0);
+                const barColor = pct >= 75 ? "#00b894" : pct >= 50 ? "#6c5ce7" : pct >= 30 ? "#fdcb6e" : "#e17055";
+                return `
+                    <div style="background:#fff;border:1px solid #ede9fe;border-radius:12px;padding:14px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                            <span style="font-size:13px;font-weight:700;color:#2d1b69;">${escapeHtml(cat.icon || "")} ${escapeHtml(cat.name)}</span>
+                            <span style="font-size:16px;font-weight:900;color:${barColor};">${pct}<small style="font-size:10px;color:#999;">/100</small></span>
+                        </div>
+                        <div style="background:#f0eaff;border-radius:50px;height:8px;overflow:hidden;">
+                            <div style="width:${pct}%;height:100%;background:${barColor};border-radius:50px;transition:width 0.8s ease;"></div>
+                        </div>
+                        <p style="margin:8px 0 0;font-size:12px;color:#666;line-height:1.5;">${escapeHtml(cat.feedback || "")}</p>
+                    </div>`;
+            }).join("");
+        }
+
+        // --- Strengths ---
+        const strengthsEl = document.getElementById("portfolioStrengths");
+        if (strengthsEl && Array.isArray(analysis.strengths)) {
+            strengthsEl.innerHTML = analysis.strengths.length
+                ? analysis.strengths.map(s => `<li>${escapeHtml(s)}</li>`).join("")
+                : "<li>Complete more profile fields to unlock strengths.</li>";
+        }
+
+        // --- Improvements ---
+        const improvEl = document.getElementById("portfolioImprovements");
+        if (improvEl && Array.isArray(analysis.improvements)) {
+            const priorityStyle = {
+                "High":   { bg: "#fff1f2", border: "#fecaca", badge: "#ef4444", label: "🔴 High" },
+                "Medium": { bg: "#fff7ed", border: "#fed7aa", badge: "#f97316", label: "🟠 Medium" },
+                "Low":    { bg: "#eff6ff", border: "#bfdbfe", badge: "#3b82f6", label: "🔵 Low" }
+            };
+            improvEl.innerHTML = analysis.improvements.length
+                ? analysis.improvements.map(imp => {
+                    const s = priorityStyle[imp.priority] || priorityStyle["Low"];
+                    return `
+                        <div style="background:${s.bg};border:1px solid ${s.border};border-radius:8px;padding:10px 12px;">
+                            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                                <span style="font-size:10px;font-weight:700;color:#fff;background:${s.badge};border-radius:4px;padding:1px 6px;">${s.label}</span>
+                                <strong style="font-size:12px;color:#1a1a2e;">${escapeHtml(imp.area)}</strong>
+                            </div>
+                            <p style="margin:0;font-size:12px;color:#555;line-height:1.5;">${escapeHtml(imp.action)}</p>
+                        </div>`;
+                }).join("")
+                : "<p style='color:#888;font-size:13px;margin:0;'>Great job! No critical improvements found.</p>";
+        }
+
+        // --- Next Steps ---
+        const nextEl = document.getElementById("portfolioNextSteps");
+        if (nextEl && Array.isArray(analysis.nextSteps)) {
+            nextEl.innerHTML = analysis.nextSteps.map(s => `<li style="margin-bottom:4px;">${escapeHtml(s)}</li>`).join("");
+        }
+
+        panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        showToast(`Portfolio analysis complete! Score: ${score}/100 (Grade ${analysis.grade})`, "success");
+
+    } catch (err) {
+        showToast("Portfolio analysis failed: " + err.message, "error");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = "✨ Re-Analyze Portfolio";
+    }
 }
 
 // --- ACHIEVEMENTS / PROOF VAULT OVERLAY MODAL ---

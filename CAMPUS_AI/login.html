@@ -4,20 +4,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusAI - Student Login</title>
+    <title>CampusAI – Student Login</title>
+    <meta name="description" content="Sign in to CampusAI with your Google account and access your AI-powered campus career hub.">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <style>
+        /* ── Auth Page Override ────────────────────── */
+        body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); min-height: 100vh; display: flex; flex-direction: column; }
+
+        .auth-hero {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* floating orbs */
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; animation: orbFloat 8s ease-in-out infinite alternate; }
+        .orb-1 { width: 420px; height: 420px; background: #6c5ce7; top: -120px; left: -100px; }
+        .orb-2 { width: 320px; height: 320px; background: #00cec9; bottom: -80px; right: -80px; animation-delay: -3s; }
+        .orb-3 { width: 200px; height: 200px; background: #fd79a8; top: 40%; left: 60%; animation-delay: -5s; }
+        @keyframes orbFloat { 0%{transform:translateY(0) scale(1);} 100%{transform:translateY(-30px) scale(1.07);} }
+
+        .auth-card {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 28px;
+            padding: 48px 44px 40px;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.45);
+            animation: fadeInUp 0.55s cubic-bezier(0.4,0,0.2,1) both;
+        }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        .auth-logo-icon {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 8px 24px rgba(108,92,231,0.5);
+        }
+        .auth-logo-text { font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .auth-logo-tag { background: rgba(162,155,254,0.25); color: #a29bfe; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(162,155,254,0.4); margin-left: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .auth-heading { color: #fff; font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 6px; font-family: 'Poppins', sans-serif; }
+        .auth-sub { color: rgba(255,255,255,0.55); font-size: 14px; text-align: center; margin-bottom: 36px; line-height: 1.5; }
+
+        /* Google Button */
+        .btn-google {
+            display: flex; align-items: center; justify-content: center; gap: 14px;
+            width: 100%; padding: 15px 20px;
+            background: #fff; color: #333;
+            border: none; border-radius: 14px;
+            font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            letter-spacing: 0.1px;
+        }
+        .btn-google:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(0,0,0,0.35); }
+        .btn-google:active { transform: translateY(0); }
+        .btn-google:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+        .btn-google svg { flex-shrink: 0; }
+
+        .auth-divider {
+            display: flex; align-items: center; gap: 12px;
+            margin: 24px 0;
+        }
+        .auth-divider::before, .auth-divider::after {
+            content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.15);
+        }
+        .auth-divider span { color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+
+        .auth-features {
+            display: flex; flex-direction: column; gap: 12px;
+            margin-top: 8px;
+        }
+        .auth-feature-item {
+            display: flex; align-items: center; gap: 12px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; padding: 12px 14px;
+        }
+        .auth-feature-icon { font-size: 20px; flex-shrink: 0; }
+        .auth-feature-text { color: rgba(255,255,255,0.75); font-size: 13px; line-height: 1.4; }
+        .auth-feature-text strong { color: #fff; font-weight: 700; }
+
+        .auth-footer-note {
+            text-align: center; margin-top: 28px;
+            color: rgba(255,255,255,0.38); font-size: 12px; line-height: 1.6;
+        }
+        .auth-footer-note a { color: rgba(162,155,254,0.8); text-decoration: underline; }
+
+        .register-link {
+            text-align: center; margin-top: 20px;
+        }
+        .register-link p { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 8px; }
+        .btn-register-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(108,92,231,0.2);
+            border: 1px solid rgba(108,92,231,0.45);
+            color: #a29bfe; padding: 10px 22px;
+            border-radius: 10px; font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-register-link:hover { background: rgba(108,92,231,0.35); color: #fff; transform: translateY(-1px); }
+
+        /* Verification notice banner */
+        #verifyBanner {
+            display: none;
+            background: linear-gradient(135deg, rgba(253,203,110,0.18), rgba(253,203,110,0.08));
+            border: 1px solid rgba(253,203,110,0.4);
+            border-radius: 12px; padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #fdcb6e; font-size: 13px; line-height: 1.5;
+            gap: 10px; align-items: flex-start;
+        }
+        #verifyBanner.show { display: flex; }
+        #verifyBanner .verify-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+        /* Already logged in */
+        #loggedInBanner {
+            display: none;
+            background: rgba(0,184,148,0.15);
+            border: 1px solid rgba(0,184,148,0.35);
+            border-radius: 12px; padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #00b894; font-size: 13px;
+            gap: 10px; align-items: center; justify-content: space-between;
+        }
+        #loggedInBanner.show { display: flex; }
+
+        .page-footer { background: transparent; color: rgba(255,255,255,0.25); text-align: center; padding: 16px; font-size: 12px; }
+    </style>
 </head>
 
 <body>
 
-    <section class="auth-section">
-        <h1>🔐 Student Login</h1>
-        <p class="section-subtitle">Access your personalized AI career roadmap, verified vault, and campus opportunities.</p>
+    <div class="auth-hero">
+        <!-- Decorative orbs -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
 
-        <div class="auth-box">
-            <!-- Google OAuth Sign-in Button -->
-            <button type="button" class="btn-google-auth" onclick="signInWithGoogle()" id="googleLoginBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <div class="auth-card">
+            <!-- Logo -->
+            <div class="auth-logo">
+                <div class="auth-logo-icon">🎓</div>
+                <div>
+                    <span class="auth-logo-text">CampusAI</span>
+                    <span class="auth-logo-tag">AI 2.0</span>
+                </div>
+            </div>
+
+            <!-- Already logged in banner -->
+            <div id="loggedInBanner">
+                <span>👋 You're already signed in!</span>
+                <a href="career-hub.html" style="background:#00b894;color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">Go to Dashboard →</a>
+            </div>
+
+            <!-- Email verification pending banner -->
+            <div id="verifyBanner">
+                <span class="verify-icon">📧</span>
+                <div>
+                    <strong style="color:#fff;">Verify your email first</strong><br>
+                    Check your inbox and click the verification link we sent you. Once verified, sign in with Google below.
+                </div>
+            </div>
+
+            <h1 class="auth-heading">Welcome back</h1>
+            <p class="auth-sub">Sign in to your CampusAI account to access your personalized AI career hub.</p>
+
+            <!-- Google Sign-In -->
+            <button type="button" class="btn-google" id="googleLoginBtn" onclick="handleGoogleSignIn()">
+                <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
@@ -26,71 +201,75 @@
                 <span>Continue with Google</span>
             </button>
 
-            <div class="auth-divider">
-                <span>OR SIGN IN WITH EMAIL</span>
-            </div>
+            <div class="auth-divider"><span>What you get</span></div>
 
-            <form onsubmit="event.preventDefault(); loginUser();">
-                <div class="form-group">
-                    <label for="loginEmail">Student Email</label>
-                    <input
-                        type="email"
-                        id="loginEmail"
-                        placeholder="student@university.edu"
-                        autocomplete="email"
-                        required
-                    >
+            <!-- Feature highlights -->
+            <div class="auth-features">
+                <div class="auth-feature-item">
+                    <div class="auth-feature-icon">🤖</div>
+                    <div class="auth-feature-text"><strong>Groq AI Career Advisor</strong> — Personalized study roadmaps tailored to your college year & dream role.</div>
                 </div>
-
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input
-                        type="password"
-                        id="loginPassword"
-                        placeholder="••••••••"
-                        autocomplete="current-password"
-                        required
-                    >
+                <div class="auth-feature-item">
+                    <div class="auth-feature-icon">🚀</div>
+                    <div class="auth-feature-text"><strong>Verified Opportunities</strong> — Internships, hackathons, and fellowships curated for you.</div>
                 </div>
+                <div class="auth-feature-item">
+                    <div class="auth-feature-icon">🏆</div>
+                    <div class="auth-feature-text"><strong>Proof Vault</strong> — Showcase your certifications, projects, and achievements.</div>
+                </div>
+            </div>
 
-                <button type="submit">
-                    Login to CampusAI →
-                </button>
-
-                <button type="button" class="btn-secondary-action" onclick="quickDemoLogin()" style="margin-top: 10px;">
-                    ⚡ One-Click Demo Student Login
-                </button>
-            </form>
-
-            <div style="text-align: center; margin-top: 24px;">
-                <p style="font-size: 14px; color: #666; margin-bottom: 8px;">Don't have a CampusAI account yet?</p>
-                <button type="button" class="btn-secondary-action" onclick="window.location.href='register.html'" style="margin-top: 0;">
-                    📝 Create New Account
+            <!-- Register link -->
+            <div class="register-link">
+                <p>Don't have a CampusAI account?</p>
+                <button type="button" class="btn-register-link" onclick="window.location.href='register.html'">
+                    📝 Create Free Account
                 </button>
             </div>
 
-            <div class="demo-hint">
-                💡 <strong>Pre-Configured Demo Credentials</strong><br>
-                Email: <code>demo@campusai.com</code><br>
-                Password: <code>password123</code>
-            </div>
-
-            <div style="text-align: center; margin-top: 15px;">
-                <button type="button" onclick="promptSupabaseKeys()" style="background: none; border: none; font-size: 12px; color: #8854d0; cursor: pointer; text-decoration: underline;">
-                    ⚙️ Configure Supabase Keys &amp; Google Auth
-                </button>
-            </div>
+            <p class="auth-footer-note">
+                By signing in you agree to our <a href="#">Terms of Service</a> &amp; <a href="#">Privacy Policy</a>.<br>
+                We only use your Google name and email.
+            </p>
         </div>
-    </section>
+    </div>
 
-    <footer class="campus-footer">
-        <p>&copy; 2026 CampusAI. Secure student authentication with Supabase &amp; Google OAuth.</p>
+    <footer class="page-footer">
+        &copy; 2026 CampusAI. Secure authentication via Google OAuth &amp; Supabase.
     </footer>
 
-    <!-- Supabase JS Client & Auth Integration -->
+    <!-- Supabase JS Client & Auth -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabaseConfig.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Show already-logged-in banner if session exists
+        (async () => {
+            await new Promise(r => setTimeout(r, 600));
+            const user = getStoredUser();
+            const token = getAuthToken();
+            if (user && token) {
+                document.getElementById('loggedInBanner').classList.add('show');
+            }
+            // Check for email_verification pending flag
+            if (sessionStorage.getItem('campusai_verify_pending') === 'true') {
+                document.getElementById('verifyBanner').classList.add('show');
+            }
+        })();
+
+        async function handleGoogleSignIn() {
+            const btn = document.getElementById('googleLoginBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="3" fill="none"/><path d="M12 2 A10 10 0 0 1 22 12" stroke="#6c5ce7" stroke-width="3" fill="none"/></svg><span>Signing you in…</span>`;
+            try {
+                await signInWithGoogle();
+            } catch(e) {
+                btn.disabled = false;
+                btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/></svg><span>Continue with Google</span>`;
+            }
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </script>
 </body>
 
 </html>

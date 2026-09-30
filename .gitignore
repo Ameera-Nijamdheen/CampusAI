@@ -4,6 +4,9 @@ node_modules/
 # Environment Variables
 .env
 
+# Local database (JSON files generated at runtime)
+data/
+
 # Logs and Temp
 *.log
 *.tmp

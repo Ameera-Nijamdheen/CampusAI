@@ -6,6 +6,21 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap');
 
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+#portfolioAnalysisPanel {
+    animation: fadeInUp 0.4s ease;
+}
+
+
 :root {
     --primary: #6c5ce7;
     --primary-hover: #5846e0;
@@ -1996,4 +2011,101 @@ body.modal-open {
     border-radius: 6px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+/* ==========================================================
+   GOOGLE AUTH BUTTON (shared)
+   ========================================================== */
+.btn-google-auth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 20px;
+    background: #fff;
+    color: #333;
+    border: 1.5px solid #e0e4f0;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom: 4px;
+}
+.btn-google-auth:hover {
+    border-color: #c5b9f7;
+    box-shadow: 0 6px 20px rgba(108,92,231,0.15);
+    transform: translateY(-2px);
+}
+.btn-google-auth:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ==========================================================
+   AUTH LOGGED-IN BANNER
+   ========================================================== */
+.auth-logged-in-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: linear-gradient(135deg, #e3fcef, #d1fae5);
+    border: 1.5px solid #6ee7b7;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 13.5px;
+    color: #065f46;
+    font-weight: 600;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================
+   ENHANCED TOAST NOTIFICATIONS
+   ========================================================== */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    max-width: 360px;
+    pointer-events: all;
+    animation: toastSlideIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    backdrop-filter: blur(8px);
+}
+
+@keyframes toastSlideIn {
+    from { opacity: 0; transform: translateX(100%); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.toast.success { background: linear-gradient(135deg, #00b894dd, #00cec9cc); }
+.toast.error   { background: linear-gradient(135deg, #d63031dd, #e17055cc); }
+.toast.info    { background: linear-gradient(135deg, #6c5ce7dd, #a29bfecc); }
+.toast.warning { background: linear-gradient(135deg, #e17055dd, #fdcb6ecc); }
+
+/* ==========================================================
+   PROFILE OVERLAY SHAKE ANIMATION
+   ========================================================== */
+@keyframes overlayShake {
+    0%, 100% { transform: translateX(0); }
+    25%       { transform: translateX(-8px); }
+    75%       { transform: translateX(8px); }
 }
