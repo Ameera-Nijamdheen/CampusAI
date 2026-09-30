@@ -5,88 +5,231 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampusAI – Create Student Account</title>
-    <meta name="description" content="Join CampusAI with your Google account. Get AI-powered career guidance, discover internships, and build your student portfolio.">
+    <meta name="description" content="Create your student account on CampusAI to unlock AI-driven study roadmaps, curated internships, and verified proof vault.">
     <link rel="stylesheet" href="style.css">
     <style>
-        body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); min-height: 100vh; display: flex; flex-direction: column; }
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
 
-        .auth-hero { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; position: relative; overflow: hidden; }
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; animation: orbFloat 8s ease-in-out infinite alternate; }
-        .orb-1 { width: 380px; height: 380px; background: #a29bfe; top: -100px; right: -80px; }
-        .orb-2 { width: 280px; height: 280px; background: #fd79a8; bottom: -60px; left: -60px; animation-delay: -4s; }
-        .orb-3 { width: 180px; height: 180px; background: #00cec9; top: 50%; right: 20%; animation-delay: -2s; }
-        @keyframes orbFloat { 0%{transform:translateY(0) scale(1);} 100%{transform:translateY(-28px) scale(1.06);} }
+        .auth-hero {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.35;
+            pointer-events: none;
+            animation: orbFloat 8s ease-in-out infinite alternate;
+        }
+        .orb-1 { width: 420px; height: 420px; background: #a29bfe; top: -120px; right: -80px; }
+        .orb-2 { width: 340px; height: 340px; background: #fd79a8; bottom: -80px; left: -80px; animation-delay: -4s; }
+        .orb-3 { width: 220px; height: 220px; background: #00cec9; top: 40%; right: 15%; animation-delay: -2s; }
+        @keyframes orbFloat { 0%{transform:translateY(0) scale(1);} 100%{transform:translateY(-24px) scale(1.05);} }
 
         .auth-card {
-            position: relative; z-index: 2;
-            width: 100%; max-width: 480px;
-            background: rgba(255,255,255,0.07);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 28px; padding: 48px 44px 40px;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.45);
-            animation: fadeInUp 0.55s cubic-bezier(0.4,0,0.2,1) both;
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 580px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 28px;
+            padding: 40px 36px;
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
         }
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
 
-        .auth-logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 30px; }
-        .auth-logo-icon { width: 52px; height: 52px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 8px 24px rgba(108,92,231,0.5); }
-        .auth-logo-text { font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 800; color: #fff; }
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .auth-logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 8px 24px rgba(108, 92, 231, 0.45);
+        }
+        .auth-logo-text { font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 800; color: #fff; }
         .auth-logo-tag { background: rgba(162,155,254,0.25); color: #a29bfe; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(162,155,254,0.4); margin-left: 4px; text-transform: uppercase; }
 
-        .auth-heading { color: #fff; font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 6px; font-family: 'Poppins', sans-serif; }
-        .auth-sub { color: rgba(255,255,255,0.55); font-size: 14px; text-align: center; margin-bottom: 32px; line-height: 1.5; }
-
-        /* Steps indicator */
-        .steps-indicator { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 30px; }
-        .step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .step-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; border: 2px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); }
-        .step.active .step-dot { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 4px 16px rgba(108,92,231,0.5); }
-        .step.done .step-dot { background: #00b894; border-color: #00b894; color: #fff; }
-        .step-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.5px; }
-        .step.active .step-label { color: #a29bfe; }
-        .step.done .step-label { color: #00b894; }
-        .step-line { width: 40px; height: 2px; background: rgba(255,255,255,0.1); margin: 0 6px; margin-bottom: 20px; }
-        .step-line.done { background: #00b894; }
+        .auth-heading { color: #fff; font-size: 24px; font-weight: 800; text-align: center; margin-bottom: 6px; font-family: 'Poppins', sans-serif; }
+        .auth-sub { color: rgba(255, 255, 255, 0.65); font-size: 13.5px; text-align: center; margin-bottom: 24px; line-height: 1.5; }
 
         .btn-google {
-            display: flex; align-items: center; justify-content: center; gap: 14px;
-            width: 100%; padding: 15px 20px;
-            background: #fff; color: #333;
-            border: none; border-radius: 14px;
-            font-size: 15px; font-weight: 700;
-            cursor: pointer; transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 13px 20px;
+            background: #fff;
+            color: #333;
+            border: none;
+            border-radius: 12px;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
         }
-        .btn-google:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(0,0,0,0.35); }
-        .btn-google:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+        .btn-google:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); }
+        .btn-google:disabled { opacity: 0.65; cursor: not-allowed; }
 
-        .process-steps {
-            display: flex; flex-direction: column; gap: 10px; margin-top: 24px;
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 22px 0 20px;
         }
-        .process-step {
-            display: flex; align-items: center; gap: 12px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px; padding: 12px 14px;
+        .auth-divider::before, .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
         }
-        .process-step-num { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #6c5ce7, #a29bfe); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; }
-        .process-step-text { color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.4; }
-        .process-step-text strong { color: #fff; }
+        .auth-divider span {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
 
-        .auth-divider { display: flex; align-items: center; gap: 12px; margin: 24px 0; }
-        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.12); }
-        .auth-divider span { color: rgba(255,255,255,0.35); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .form-full { grid-column: span 2; }
 
-        .login-link { text-align: center; margin-top: 20px; }
-        .login-link p { color: rgba(255,255,255,0.45); font-size: 13px; margin-bottom: 8px; }
-        .btn-login-link { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,184,148,0.15); border: 1px solid rgba(0,184,148,0.35); color: #00b894; padding: 10px 22px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-        .btn-login-link:hover { background: rgba(0,184,148,0.25); color: #fff; transform: translateY(-1px); }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .input-group label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+        }
+        .input-group label span.req { color: #ff7675; }
 
-        .auth-footer-note { text-align: center; margin-top: 24px; color: rgba(255,255,255,0.3); font-size: 11.5px; line-height: 1.6; }
-        .auth-footer-note a { color: rgba(162,155,254,0.7); text-decoration: underline; }
-        .page-footer { background: transparent; color: rgba(255,255,255,0.22); text-align: center; padding: 16px; font-size: 12px; }
+        .input-group input, .input-group select {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: #fff;
+            font-size: 13.5px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .input-group select option { background: #24243e; color: #fff; }
+        .input-group input:focus, .input-group select:focus {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: #a29bfe;
+            box-shadow: 0 0 0 3px rgba(162, 155, 254, 0.25);
+        }
+        .input-group input::placeholder { color: rgba(255, 255, 255, 0.35); }
+
+        .field-tip { font-size: 11px; color: rgba(255, 255, 255, 0.45); margin-top: 2px; }
+
+        .error-banner {
+            display: none;
+            background: rgba(214, 48, 49, 0.2);
+            border: 1px solid rgba(214, 48, 49, 0.45);
+            color: #ff7675;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        .error-banner.show { display: block; animation: shake 0.3s ease; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #6c5ce7, #8e44ad);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(108, 92, 231, 0.4);
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(108, 92, 231, 0.55);
+        }
+        .btn-submit:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-row {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13.5px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .login-row a {
+            color: #a29bfe;
+            text-decoration: underline;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        .page-footer {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: center;
+            padding: 16px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 540px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-full { grid-column: span 1; }
+            .auth-card { padding: 30px 20px; }
+        }
     </style>
 </head>
 
@@ -106,103 +249,223 @@
                 </div>
             </div>
 
-            <!-- Process Steps -->
-            <div class="steps-indicator">
-                <div class="step active">
-                    <div class="step-dot">1</div>
-                    <div class="step-label">Sign Up</div>
-                </div>
-                <div class="step-line"></div>
-                <div class="step">
-                    <div class="step-dot">2</div>
-                    <div class="step-label">Verify</div>
-                </div>
-                <div class="step-line"></div>
-                <div class="step">
-                    <div class="step-dot">3</div>
-                    <div class="step-label">Profile</div>
-                </div>
-                <div class="step-line"></div>
-                <div class="step">
-                    <div class="step-dot">4</div>
-                    <div class="step-label">Dashboard</div>
-                </div>
-            </div>
+            <h1 class="auth-heading">Create Student Account</h1>
+            <p class="auth-sub">Enter your student details to activate your AI study roadmaps &amp; career tools.</p>
 
-            <h1 class="auth-heading">Create your account</h1>
-            <p class="auth-sub">Join thousands of students accelerating their campus careers with AI-powered guidance.</p>
+            <!-- Error message container -->
+            <div id="errorBanner" class="error-banner"></div>
 
-            <!-- Google Sign-Up -->
-            <button type="button" class="btn-google" id="googleRegisterBtn" onclick="handleGoogleSignUp()">
-                <svg width="22" height="22" viewBox="0 0 24 24">
+            <!-- Quick Google Sign-Up -->
+            <button type="button" class="btn-google" id="googleRegisterBtn" onclick="handleGoogleRegister()">
+                <svg width="20" height="20" viewBox="0 0 24 24">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
                 </svg>
-                <span>Sign up with Google</span>
+                <span>Quick Sign up with Google</span>
             </button>
 
-            <div class="auth-divider"><span>How it works</span></div>
-
-            <!-- Registration process steps -->
-            <div class="process-steps">
-                <div class="process-step">
-                    <div class="process-step-num">1</div>
-                    <div class="process-step-text"><strong>Sign up with Google</strong> — Quick, secure, no password needed.</div>
-                </div>
-                <div class="process-step">
-                    <div class="process-step-num">2</div>
-                    <div class="process-step-text"><strong>Verify your email</strong> — We send a confirmation link to your Gmail.</div>
-                </div>
-                <div class="process-step">
-                    <div class="process-step-num">3</div>
-                    <div class="process-step-text"><strong>Complete your profile</strong> — Required before accessing the platform.</div>
-                </div>
-                <div class="process-step">
-                    <div class="process-step-num">4</div>
-                    <div class="process-step-text"><strong>Access your AI dashboard</strong> — Personalized career guidance starts here.</div>
-                </div>
+            <div class="auth-divider">
+                <span>Or enter your student details</span>
             </div>
 
-            <!-- Login link -->
-            <div class="login-link">
-                <p>Already have a CampusAI account?</p>
-                <button type="button" class="btn-login-link" onclick="window.location.href='login.html'">
-                    🔐 Sign In Instead
+            <!-- Comprehensive Registration Form -->
+            <form id="registerForm" onsubmit="handleRegistrationSubmit(event)">
+                <div class="form-grid">
+                    <!-- Full Name -->
+                    <div class="input-group form-full">
+                        <label for="regName">Full Name <span class="req">*</span></label>
+                        <input type="text" id="regName" placeholder="e.g. Alex Johnson" required autocomplete="name">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="input-group">
+                        <label for="regEmail">College / Personal Email <span class="req">*</span></label>
+                        <input type="email" id="regEmail" placeholder="e.g. alex@college.edu" required autocomplete="email">
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group">
+                        <label for="regPassword">Password <span class="req">*</span></label>
+                        <input type="password" id="regPassword" placeholder="Min. 6 characters" minlength="6" required autocomplete="new-password">
+                    </div>
+
+                    <!-- College -->
+                    <div class="input-group form-full">
+                        <label for="regCollege">College / University Name <span class="req">*</span></label>
+                        <input type="text" id="regCollege" placeholder="e.g. Indian Institute of Technology / State University" required>
+                    </div>
+
+                    <!-- Course / Branch -->
+                    <div class="input-group">
+                        <label for="regCourse">Degree &amp; Branch <span class="req">*</span></label>
+                        <input type="text" id="regCourse" placeholder="e.g. B.Tech Computer Science" required>
+                    </div>
+
+                    <!-- Current Year -->
+                    <div class="input-group">
+                        <label for="regYear">Current Year <span class="req">*</span></label>
+                        <select id="regYear" required>
+                            <option value="1st Year">1st Year (Freshman)</option>
+                            <option value="2nd Year">2nd Year (Sophomore)</option>
+                            <option value="3rd Year" selected>3rd Year (Junior)</option>
+                            <option value="4th Year">4th Year (Senior)</option>
+                            <option value="Masters / M.Tech">Masters / Postgrad</option>
+                        </select>
+                    </div>
+
+                    <!-- Target Career Role -->
+                    <div class="input-group form-full">
+                        <label for="regRole">Target Dream Role <span class="req">*</span></label>
+                        <input type="text" id="regRole" placeholder="e.g. AI / Machine Learning Engineer, Full-Stack Developer" required>
+                        <span class="field-tip">What job or internship do you want to target?</span>
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="input-group form-full">
+                        <label for="regSkills">Current Technical Skills <span class="req">*</span></label>
+                        <input type="text" id="regSkills" placeholder="e.g. Python, JavaScript, React, SQL, PyTorch" required>
+                        <span class="field-tip">Languages, frameworks, or tools you already know</span>
+                    </div>
+
+                    <!-- Location / Place of Interest -->
+                    <div class="input-group form-full">
+                        <label for="regPlace">Preferred Job / Internship City</label>
+                        <input type="text" id="regPlace" placeholder="e.g. Bangalore, Hyderabad, Remote, Silicon Valley">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitRegisterBtn">
+                    <span>🚀 Create Student Account &amp; Enter CampusAI</span>
                 </button>
-            </div>
+            </form>
 
-            <p class="auth-footer-note">
-                By creating an account you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a>.<br>
-                We only access your Google name and email.
-            </p>
+            <div class="login-row">
+                Already registered? <a href="login.html">Sign In to your account →</a>
+            </div>
         </div>
     </div>
 
     <footer class="page-footer">
-        &copy; 2026 CampusAI. University Career Acceleration with Google OAuth &amp; Supabase.
+        &copy; 2026 CampusAI. University Career Acceleration &amp; Verified Opportunities.
     </footer>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabaseConfig.js"></script>
     <script src="script.js"></script>
     <script>
-        async function handleGoogleSignUp() {
+        function showError(msg) {
+            const el = document.getElementById('errorBanner');
+            el.textContent = msg;
+            el.classList.add('show');
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function hideError() {
+            const el = document.getElementById('errorBanner');
+            el.classList.remove('show');
+            el.textContent = '';
+        }
+
+        async function handleRegistrationSubmit(e) {
+            e.preventDefault();
+            hideError();
+
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const college = document.getElementById('regCollege').value.trim();
+            const course = document.getElementById('regCourse').value.trim();
+            const year = document.getElementById('regYear').value;
+            const targetRole = document.getElementById('regRole').value.trim();
+            const skills = document.getElementById('regSkills').value.trim();
+            const placeOfInterest = document.getElementById('regPlace').value.trim() || 'Bangalore / Remote';
+
+            if (!name || !email || !password || !college || !course || !year || !targetRole || !skills) {
+                showError('Please complete all required fields marked with *');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters long.');
+                return;
+            }
+
+            const btn = document.getElementById('submitRegisterBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳ Creating Account &amp; Setting up Hub…</span>';
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        college,
+                        course,
+                        year,
+                        targetRole,
+                        skills,
+                        placeOfInterest
+                    })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.error || 'Registration failed. Please try again.');
+                }
+
+                // Save session & profile data
+                if (typeof setAuthToken === 'function') setAuthToken(data.token);
+                if (typeof setStoredUser === 'function') setStoredUser(data.user);
+
+                localStorage.setItem('studentName', name);
+                localStorage.setItem('studentCollege', college);
+                localStorage.setItem('studentCourse', course);
+                localStorage.setItem('studentYear', year);
+                localStorage.setItem('studentRole', targetRole);
+                localStorage.setItem('studentSkills', skills);
+                localStorage.setItem('studentPlace', placeOfInterest);
+                localStorage.setItem('campusai_profile_completed', 'true');
+
+                if (typeof showToast === 'function') {
+                    showToast('Account created successfully! Welcome to CampusAI 🎉', 'success');
+                }
+
+                // Redirect straight into the Career Hub
+                setTimeout(() => {
+                    window.location.href = 'career-hub.html';
+                }, 800);
+
+            } catch (err) {
+                btn.disabled = false;
+                btn.innerHTML = '<span>🚀 Create Student Account &amp; Enter CampusAI</span>';
+                showError(err.message || 'An unexpected error occurred. Please try again.');
+            }
+        }
+
+        async function handleGoogleRegister() {
             const btn = document.getElementById('googleRegisterBtn');
             btn.disabled = true;
-            btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="3" fill="none"/><path d="M12 2 A10 10 0 0 1 22 12" stroke="#6c5ce7" stroke-width="3" fill="none"/></svg><span>Redirecting to Google…</span>`;
+            btn.innerHTML = `<span>⏳ Connecting to Google…</span>`;
             try {
-                await signInWithGoogle();
-            } catch(e) {
+                if (typeof signInWithGoogle === 'function') {
+                    await signInWithGoogle();
+                } else {
+                    throw new Error('Google Sign-In service is not ready. Please try again.');
+                }
+            } catch (e) {
                 btn.disabled = false;
-                btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/></svg><span>Sign up with Google</span>`;
+                btn.innerHTML = `<span>Quick Sign up with Google</span>`;
+                showError(e.message || 'Could not start Google Sign-In.');
             }
         }
     </script>
-    <style>
-        @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
 </body>
 
 </html>

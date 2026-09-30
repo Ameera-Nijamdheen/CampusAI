@@ -5,25 +5,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampusAI – Student Login</title>
-    <meta name="description" content="Sign in to CampusAI with your Google account and access your AI-powered campus career hub.">
+    <meta name="description" content="Sign in to CampusAI with your email or Google account to access your AI-powered career hub.">
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <style>
-        /* ── Auth Page Override ────────────────────── */
-        body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); min-height: 100vh; display: flex; flex-direction: column; }
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
 
         .auth-hero {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 40px 16px;
             position: relative;
             overflow: hidden;
         }
 
-        /* floating orbs */
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; animation: orbFloat 8s ease-in-out infinite alternate; }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.35;
+            pointer-events: none;
+            animation: orbFloat 8s ease-in-out infinite alternate;
+        }
         .orb-1 { width: 420px; height: 420px; background: #6c5ce7; top: -120px; left: -100px; }
         .orb-2 { width: 320px; height: 320px; background: #00cec9; bottom: -80px; right: -80px; animation-delay: -3s; }
         .orb-3 { width: 200px; height: 200px; background: #fd79a8; top: 40%; left: 60%; animation-delay: -5s; }
@@ -33,137 +43,175 @@
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 440px;
-            background: rgba(255,255,255,0.07);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.15);
+            max-width: 460px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.16);
             border-radius: 28px;
-            padding: 48px 44px 40px;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.45);
-            animation: fadeInUp 0.55s cubic-bezier(0.4,0,0.2,1) both;
+            padding: 44px 38px;
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
         }
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
 
         .auth-logo {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
         .auth-logo-icon {
-            width: 52px; height: 52px;
+            width: 48px;
+            height: 48px;
             background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-            border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 26px;
-            box-shadow: 0 8px 24px rgba(108,92,231,0.5);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 8px 24px rgba(108, 92, 231, 0.45);
         }
-        .auth-logo-text { font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
-        .auth-logo-tag { background: rgba(162,155,254,0.25); color: #a29bfe; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(162,155,254,0.4); margin-left: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .auth-logo-text { font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 800; color: #fff; }
+        .auth-logo-tag { background: rgba(162,155,254,0.25); color: #a29bfe; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(162,155,254,0.4); margin-left: 4px; text-transform: uppercase; }
 
-        .auth-heading { color: #fff; font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 6px; font-family: 'Poppins', sans-serif; }
-        .auth-sub { color: rgba(255,255,255,0.55); font-size: 14px; text-align: center; margin-bottom: 36px; line-height: 1.5; }
+        .auth-heading { color: #fff; font-size: 24px; font-weight: 800; text-align: center; margin-bottom: 6px; font-family: 'Poppins', sans-serif; }
+        .auth-sub { color: rgba(255, 255, 255, 0.65); font-size: 13.5px; text-align: center; margin-bottom: 24px; line-height: 1.5; }
 
-        /* Google Button */
         .btn-google {
-            display: flex; align-items: center; justify-content: center; gap: 14px;
-            width: 100%; padding: 15px 20px;
-            background: #fff; color: #333;
-            border: none; border-radius: 14px;
-            font-size: 15px; font-weight: 700;
-            cursor: pointer; transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-            letter-spacing: 0.1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 13px 20px;
+            background: #fff;
+            color: #333;
+            border: none;
+            border-radius: 12px;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
         }
-        .btn-google:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(0,0,0,0.35); }
-        .btn-google:active { transform: translateY(0); }
-        .btn-google:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
-        .btn-google svg { flex-shrink: 0; }
+        .btn-google:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); }
+        .btn-google:disabled { opacity: 0.65; cursor: not-allowed; }
 
         .auth-divider {
-            display: flex; align-items: center; gap: 12px;
-            margin: 24px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 22px 0 20px;
         }
         .auth-divider::before, .auth-divider::after {
-            content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.15);
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
         }
-        .auth-divider span { color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+        .auth-divider span {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
 
-        .auth-features {
-            display: flex; flex-direction: column; gap: 12px;
-            margin-top: 8px;
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
         }
-        .auth-feature-item {
-            display: flex; align-items: center; gap: 12px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px; padding: 12px 14px;
+        .input-group label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
         }
-        .auth-feature-icon { font-size: 20px; flex-shrink: 0; }
-        .auth-feature-text { color: rgba(255,255,255,0.75); font-size: 13px; line-height: 1.4; }
-        .auth-feature-text strong { color: #fff; font-weight: 700; }
 
-        .auth-footer-note {
-            text-align: center; margin-top: 28px;
-            color: rgba(255,255,255,0.38); font-size: 12px; line-height: 1.6;
+        .input-group input {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 10px;
+            padding: 11px 14px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
         }
-        .auth-footer-note a { color: rgba(162,155,254,0.8); text-decoration: underline; }
+        .input-group input:focus {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: #a29bfe;
+            box-shadow: 0 0 0 3px rgba(162, 155, 254, 0.25);
+        }
+        .input-group input::placeholder { color: rgba(255, 255, 255, 0.35); }
 
-        .register-link {
-            text-align: center; margin-top: 20px;
-        }
-        .register-link p { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 8px; }
-        .btn-register-link {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(108,92,231,0.2);
-            border: 1px solid rgba(108,92,231,0.45);
-            color: #a29bfe; padding: 10px 22px;
-            border-radius: 10px; font-size: 13px; font-weight: 700;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .btn-register-link:hover { background: rgba(108,92,231,0.35); color: #fff; transform: translateY(-1px); }
-
-        /* Verification notice banner */
-        #verifyBanner {
+        .error-banner {
             display: none;
-            background: linear-gradient(135deg, rgba(253,203,110,0.18), rgba(253,203,110,0.08));
-            border: 1px solid rgba(253,203,110,0.4);
-            border-radius: 12px; padding: 14px 16px;
-            margin-bottom: 20px;
-            color: #fdcb6e; font-size: 13px; line-height: 1.5;
-            gap: 10px; align-items: flex-start;
+            background: rgba(214, 48, 49, 0.2);
+            border: 1px solid rgba(214, 48, 49, 0.45);
+            color: #ff7675;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            line-height: 1.4;
         }
-        #verifyBanner.show { display: flex; }
-        #verifyBanner .verify-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .error-banner.show { display: block; }
 
-        /* Already logged in */
-        #loggedInBanner {
-            display: none;
-            background: rgba(0,184,148,0.15);
-            border: 1px solid rgba(0,184,148,0.35);
-            border-radius: 12px; padding: 14px 16px;
-            margin-bottom: 20px;
-            color: #00b894; font-size: 13px;
-            gap: 10px; align-items: center; justify-content: space-between;
+        .btn-submit {
+            background: linear-gradient(135deg, #6c5ce7, #8e44ad);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 13px 20px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(108, 92, 231, 0.4);
+            width: 100%;
+            margin-top: 10px;
         }
-        #loggedInBanner.show { display: flex; }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(108, 92, 231, 0.55);
+        }
+        .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
 
-        .page-footer { background: transparent; color: rgba(255,255,255,0.25); text-align: center; padding: 16px; font-size: 12px; }
+        .register-row {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 13.5px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .register-row a {
+            color: #a29bfe;
+            text-decoration: underline;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        .page-footer {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: center;
+            padding: 16px;
+            font-size: 12px;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="auth-hero">
-        <!-- Decorative orbs -->
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
 
         <div class="auth-card">
-            <!-- Logo -->
             <div class="auth-logo">
                 <div class="auth-logo-icon">🎓</div>
                 <div>
@@ -172,27 +220,14 @@
                 </div>
             </div>
 
-            <!-- Already logged in banner -->
-            <div id="loggedInBanner">
-                <span>👋 You're already signed in!</span>
-                <a href="career-hub.html" style="background:#00b894;color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">Go to Dashboard →</a>
-            </div>
+            <h1 class="auth-heading">Welcome Back</h1>
+            <p class="auth-sub">Sign in to access your study roadmaps, portfolio vault &amp; campus opportunities.</p>
 
-            <!-- Email verification pending banner -->
-            <div id="verifyBanner">
-                <span class="verify-icon">📧</span>
-                <div>
-                    <strong style="color:#fff;">Verify your email first</strong><br>
-                    Check your inbox and click the verification link we sent you. Once verified, sign in with Google below.
-                </div>
-            </div>
-
-            <h1 class="auth-heading">Welcome back</h1>
-            <p class="auth-sub">Sign in to your CampusAI account to access your personalized AI career hub.</p>
+            <div id="loginError" class="error-banner"></div>
 
             <!-- Google Sign-In -->
             <button type="button" class="btn-google" id="googleLoginBtn" onclick="handleGoogleSignIn()">
-                <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg width="20" height="20" viewBox="0 0 24 24">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
@@ -201,74 +236,140 @@
                 <span>Continue with Google</span>
             </button>
 
-            <div class="auth-divider"><span>What you get</span></div>
-
-            <!-- Feature highlights -->
-            <div class="auth-features">
-                <div class="auth-feature-item">
-                    <div class="auth-feature-icon">🤖</div>
-                    <div class="auth-feature-text"><strong>Groq AI Career Advisor</strong> — Personalized study roadmaps tailored to your college year & dream role.</div>
-                </div>
-                <div class="auth-feature-item">
-                    <div class="auth-feature-icon">🚀</div>
-                    <div class="auth-feature-text"><strong>Verified Opportunities</strong> — Internships, hackathons, and fellowships curated for you.</div>
-                </div>
-                <div class="auth-feature-item">
-                    <div class="auth-feature-icon">🏆</div>
-                    <div class="auth-feature-text"><strong>Proof Vault</strong> — Showcase your certifications, projects, and achievements.</div>
-                </div>
+            <div class="auth-divider">
+                <span>Or sign in with email</span>
             </div>
 
-            <!-- Register link -->
-            <div class="register-link">
-                <p>Don't have a CampusAI account?</p>
-                <button type="button" class="btn-register-link" onclick="window.location.href='register.html'">
-                    📝 Create Free Account
+            <!-- Email / Password Form -->
+            <form id="loginForm" onsubmit="handleEmailLogin(event)">
+                <div class="input-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="e.g. alex@college.edu" required autocomplete="email">
+                </div>
+
+                <div class="input-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitLoginBtn">
+                    <span>Sign In to CampusAI →</span>
                 </button>
-            </div>
+            </form>
 
-            <p class="auth-footer-note">
-                By signing in you agree to our <a href="#">Terms of Service</a> &amp; <a href="#">Privacy Policy</a>.<br>
-                We only use your Google name and email.
-            </p>
+            <div class="register-row">
+                Don't have an account? <a href="register.html">Register for free →</a>
+            </div>
         </div>
     </div>
 
     <footer class="page-footer">
-        &copy; 2026 CampusAI. Secure authentication via Google OAuth &amp; Supabase.
+        &copy; 2026 CampusAI. University Career Acceleration with Google OAuth &amp; JWT.
     </footer>
 
-    <!-- Supabase JS Client & Auth -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabaseConfig.js"></script>
     <script src="script.js"></script>
     <script>
-        // Show already-logged-in banner if session exists
-        (async () => {
-            await new Promise(r => setTimeout(r, 600));
-            const user = getStoredUser();
-            const token = getAuthToken();
-            if (user && token) {
-                document.getElementById('loggedInBanner').classList.add('show');
+        function showLoginError(msg) {
+            const el = document.getElementById('loginError');
+            el.textContent = msg;
+            el.classList.add('show');
+        }
+
+        function hideLoginError() {
+            const el = document.getElementById('loginError');
+            el.classList.remove('show');
+            el.textContent = '';
+        }
+
+        async function handleEmailLogin(e) {
+            e.preventDefault();
+            hideLoginError();
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showLoginError('Please enter both your email and password.');
+                return;
             }
-            // Check for email_verification pending flag
-            if (sessionStorage.getItem('campusai_verify_pending') === 'true') {
-                document.getElementById('verifyBanner').classList.add('show');
+
+            const btn = document.getElementById('submitLoginBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳ Signing you in…</span>';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.error || 'Invalid email or password.');
+                }
+
+                // Store credentials
+                if (typeof setAuthToken === 'function') setAuthToken(data.token);
+                if (typeof setStoredUser === 'function') setStoredUser(data.user);
+
+                if (data.profile) {
+                    const p = data.profile;
+                    if (p.fullName) localStorage.setItem('studentName', p.fullName);
+                    if (p.college) localStorage.setItem('studentCollege', p.college);
+                    if (p.course) localStorage.setItem('studentCourse', p.course);
+                    if (p.year) localStorage.setItem('studentYear', p.year);
+                    if (p.targetRole) localStorage.setItem('studentRole', p.targetRole);
+                    if (p.skills) localStorage.setItem('studentSkills', p.skills);
+                    if (p.placeOfInterest) localStorage.setItem('studentPlace', p.placeOfInterest);
+
+                    const complete = p.college && p.course && p.year && p.targetRole && p.skills &&
+                        p.college.trim() !== '' && p.skills.trim() !== '';
+                    if (complete) {
+                        localStorage.setItem('campusai_profile_completed', 'true');
+                    }
+                }
+
+                if (typeof showToast === 'function') {
+                    showToast('Welcome back, ' + (data.user.name || 'Student') + '! 🎉', 'success');
+                }
+
+                // Check for redirect param
+                const params = new URLSearchParams(window.location.search);
+                const redirectTarget = params.get('redirect') || 'career-hub.html';
+
+                setTimeout(() => {
+                    window.location.href = redirectTarget;
+                }, 600);
+
+            } catch (err) {
+                btn.disabled = false;
+                btn.innerHTML = '<span>Sign In to CampusAI →</span>';
+                showLoginError(err.message || 'Login failed. Please check your credentials.');
             }
-        })();
+        }
 
         async function handleGoogleSignIn() {
             const btn = document.getElementById('googleLoginBtn');
             btn.disabled = true;
-            btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="3" fill="none"/><path d="M12 2 A10 10 0 0 1 22 12" stroke="#6c5ce7" stroke-width="3" fill="none"/></svg><span>Signing you in…</span>`;
+            btn.innerHTML = '<span>⏳ Connecting to Google…</span>';
             try {
-                await signInWithGoogle();
-            } catch(e) {
+                if (typeof signInWithGoogle === 'function') {
+                    await signInWithGoogle();
+                } else {
+                    throw new Error('Google Sign-In is not initialized. Please try again.');
+                }
+            } catch (e) {
                 btn.disabled = false;
-                btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/></svg><span>Continue with Google</span>`;
+                btn.innerHTML = `<span>Continue with Google</span>`;
+                showLoginError(e.message || 'Google sign-in error.');
+            }
         }
     </script>
-    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 </body>
 
 </html>

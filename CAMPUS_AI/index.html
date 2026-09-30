@@ -25,15 +25,15 @@
                 Personalized study guidance, course roadmaps based on your target city &amp; dream role, verified campus hackathons, internships, and portfolio showcase.
             </p>
 
-            <div class="hero-actions">
-                <a href="career-hub.html" class="hero-btn hero-btn-primary">
-                    🤖 Open AI Study Guide &amp; Hub →
+            <div class="hero-actions" id="heroActions">
+                <a href="register.html" class="hero-btn hero-btn-primary" id="heroPrimaryBtn">
+                    📝 Register Free Student Account →
+                </a>
+                <a href="login.html" class="hero-btn hero-btn-outline" id="heroSecondaryBtn">
+                    🔐 Login to CampusAI
                 </a>
                 <a href="opportunities.html" class="hero-btn hero-btn-outline">
                     🚀 Explore Opportunities
-                </a>
-                <a href="student.html" class="hero-btn hero-btn-outline">
-                    🎓 Complete Profile
                 </a>
             </div>
 
@@ -97,6 +97,45 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabaseConfig.js"></script>
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = typeof getStoredUser === 'function' ? getStoredUser() : null;
+            const token = typeof getAuthToken === 'function' ? getAuthToken() : '';
+            if (user && token) {
+                const heroActions = document.getElementById('heroActions');
+                if (heroActions) {
+                    heroActions.innerHTML = `
+                        <a href="career-hub.html" class="hero-btn hero-btn-primary">
+                            🤖 Open AI Career Hub →
+                        </a>
+                        <a href="student.html" class="hero-btn hero-btn-outline">
+                            🎓 My Student Profile
+                        </a>
+                        <a href="opportunities.html" class="hero-btn hero-btn-outline">
+                            🚀 Explore Opportunities
+                        </a>
+                    `;
+                }
+                const authBox = document.querySelector('.auth-box');
+                if (authBox) {
+                    authBox.innerHTML = `
+                        <h3 style="margin-bottom: 8px;">👋 Welcome back, ${escapeHtml(user.name || 'Student')}!</h3>
+                        <p style="color: #666; font-size: 14px; margin-bottom: 18px;">
+                            Your personalized study plans, opportunities, and career roadmaps are waiting.
+                        </p>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+                            <button onclick="window.location.href='career-hub.html'" style="flex: 1; min-width: 180px; margin: 0;">
+                                🚀 Go to Career Hub →
+                            </button>
+                            <button onclick="logoutUser()" class="btn-secondary-action" style="flex: 0 0 auto; margin: 0;">
+                                Logout
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

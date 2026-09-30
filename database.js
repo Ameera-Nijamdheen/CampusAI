@@ -292,7 +292,7 @@ class Database {
         return this.data.users.find(u => u.id === id) || null;
     }
 
-    createUser({ name, email, password }) {
+    createUser({ name, email, password, college = "", course = "", year = "", targetRole = "", skills = "", placeOfInterest = "", gpa = "" }) {
         const normalizedEmail = email.trim().toLowerCase();
         if (this.findUserByEmail(normalizedEmail)) {
             throw new Error("An account with this email already exists.");
@@ -311,18 +311,18 @@ class Database {
 
         this.data.users.push(newUser);
 
-        // Initialize empty profile
+        // Initialize profile with entered details
         this.data.profiles[newUser.id] = {
             userId: newUser.id,
             fullName: newUser.name,
-            college: "",
-            course: "",
-            year: "",
-            gpa: "",
-            skills: "",
+            college: (college || "").trim(),
+            course: (course || "").trim(),
+            year: (year || "1st Year").trim(),
+            gpa: (gpa || "").trim(),
+            skills: (skills || "").trim(),
             interests: "",
-            placeOfInterest: "Bangalore / Remote",
-            targetRole: "Software Engineer",
+            placeOfInterest: (placeOfInterest || "Bangalore / Remote").trim(),
+            targetRole: (targetRole || "Software Engineer").trim(),
             careerGoals: "",
             preferredWorkMode: "Hybrid",
             updatedAt: new Date().toISOString()

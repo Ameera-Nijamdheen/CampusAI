@@ -106,36 +106,38 @@ function isProfileCompleted() {
     return false;
 }
 
-// --- STRICT AUTHENTICATION & MANDATORY ONBOARDING WALL ---
-// 1. Unauthenticated users cannot access members-only pages
-// 2. Authenticated users with incomplete profiles see mandatory overlay (handled by supabaseConfig.js)
+// --- AUTHENTICATION WALL ---
+// Public pages: index, login, register, auth-callback, opportunities
+// Protected pages: career-hub, opportunity-apply, student (requires login)
 function enforceAuthWall() {
     const path = window.location.pathname;
-    const isPublicPage =
-        path.endsWith("login.html") ||
-        path.endsWith("register.html") ||
-        path.endsWith("auth-callback.html") ||
-        path.endsWith("index.html") ||
-        path === "/" || path === "";
+    const page = path.split("/").pop() || "";
+
+    // Strictly public pages that anyone can view anytime
+    const publicPages = ["", "index.html", "login.html", "register.html", "auth-callback.html", "opportunities.html", "opportunity-details.html"];
+    if (publicPages.includes(page) || path === "/") {
+        return true;
+    }
+
     const token = getAuthToken();
     const user = getStoredUser();
 
-    // Not logged in -> redirect to login (but let supabase OAuth callback through)
-    if (!isPublicPage && (!token || !user)) {
-        const page = path.split("/").pop() || "index.html";
+    // Not logged in → go to login
+    if (!token || !user) {
         sessionStorage.setItem("campusai_login_prompt", "Please log in to access CampusAI.");
-        const redirectParam = (page && page !== "login.html" && page !== "register.html") ? `?redirect=${encodeURIComponent(page)}` : "";
-        window.location.replace("login.html" + redirectParam);
+        window.location.replace("login.html?redirect=" + encodeURIComponent(page));
         return false;
     }
 
-    // Logged in but profile incomplete → supabaseConfig.js handles the overlay,
-    // but also hard-redirect as a fallback (except on student.html)
-    if (!isPublicPage && token && user && !path.endsWith("student.html")) {
-        if (!isProfileCompleted()) {
-            // Overlay will appear via supabaseConfig.js — don't redirect yet
-            // Allow page to load, overlay fires after 500ms
-        }
+    // On student.html, allow authenticated users so they can complete/edit their details
+    if (page === "student.html") {
+        return true;
+    }
+
+    // Logged in but profile incomplete → go to student.html
+    if (!isProfileCompleted()) {
+        window.location.replace("student.html?mandatory=true");
+        return false;
     }
 
     return true;
@@ -377,6 +379,12 @@ function quickDemoLogin() {
 function logoutUser() {
     apiFetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     clearAllUserSessionData();
+    try {
+        if (typeof getSupabase === "function") {
+            const sb = getSupabase();
+            if (sb && sb.auth) sb.auth.signOut().catch(() => {});
+        }
+    } catch(e) {}
     showToast("Logged out successfully.", "info");
     setTimeout(() => {
         window.location.href = "login.html";

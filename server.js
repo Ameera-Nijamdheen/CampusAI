@@ -68,7 +68,7 @@ function optionalAuth(req, res, next) {
 // Register
 app.post('/api/auth/register', (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, college, course, year, targetRole, skills, placeOfInterest, gpa } = req.body;
 
         if (!name || !email || !password) {
             return res.status(400).json({ error: "Name, email, and password are required." });
@@ -82,7 +82,18 @@ app.post('/api/auth/register', (req, res) => {
             return res.status(400).json({ error: "Password must be at least 6 characters long." });
         }
 
-        const user = database.createUser({ name, email, password });
+        const user = database.createUser({ 
+            name, 
+            email, 
+            password,
+            college,
+            course,
+            year,
+            targetRole,
+            skills,
+            placeOfInterest,
+            gpa
+        });
         const token = generateToken(user);
         const profile = database.getProfile(user.id);
 
@@ -143,6 +154,56 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
 // Logout
 app.post('/api/auth/logout', (req, res) => {
     res.json({ success: true, message: "Logged out successfully." });
+});
+
+// Google OAuth → Backend JWT Bridge
+// Called from frontend after Google sign-in to get a proper backend JWT
+app.post('/api/auth/google-session', (req, res) => {
+    try {
+        const { email, name, googleId } = req.body;
+
+        if (!email || !name) {
+            return res.status(400).json({ error: "Email and name are required." });
+        }
+
+        let user = database.findUserByEmail(email);
+
+        if (!user) {
+            // Auto-create user for Google sign-in (no password needed)
+            const newUser = {
+                id: "google-" + Date.now() + "-" + Math.random().toString(36).substring(2, 7),
+                name: name.trim(),
+                email: email.trim().toLowerCase(),
+                passwordHash: "", // Google auth users don't have passwords
+                googleId: googleId || "",
+                createdAt: new Date().toISOString()
+            };
+            database.data.users.push(newUser);
+            database.data.profiles[newUser.id] = {
+                userId: newUser.id,
+                fullName: newUser.name,
+                college: "", course: "", year: "", gpa: "",
+                skills: "", interests: "", placeOfInterest: "",
+                targetRole: "", careerGoals: "", preferredWorkMode: "",
+                updatedAt: new Date().toISOString()
+            };
+            database.save();
+            user = newUser;
+        }
+
+        const token = generateToken(user);
+        const profile = database.getProfile(user.id);
+
+        res.json({
+            success: true,
+            token,
+            user: { id: user.id, name: user.name, email: user.email },
+            profile
+        });
+    } catch (err) {
+        console.error("Google session bridge error:", err);
+        res.status(500).json({ error: "Failed to create session." });
+    }
 });
 
 // ==========================================
