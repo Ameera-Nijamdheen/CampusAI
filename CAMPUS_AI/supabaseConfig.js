@@ -70,9 +70,8 @@ async function signInWithGoogle() {
     }
     try {
         const origin = window.location.origin;
-        const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-        // Always redirect back to the auth callback handler page
-        const redirectTo = origin + basePath + 'auth-callback.html';
+        // Express serves CAMPUS_AI/ as web root, so all pages are at /<page>.html
+        const redirectTo = origin + '/auth-callback.html';
         const { error } = await sb.auth.signInWithOAuth({
             provider: 'google',
             options: {

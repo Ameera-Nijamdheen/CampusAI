@@ -6,6 +6,12 @@
 
 const API_BASE = ""; // Relative to host (served on same origin)
 
+// --- HTML ESCAPE HELPER (prevents XSS in template literals) ---
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
 // --- TOAST NOTIFICATION SYSTEM ---
 function showToast(message, type = "info") {
     let container = document.getElementById("toast-container");
