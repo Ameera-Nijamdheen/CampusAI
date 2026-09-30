@@ -2109,3 +2109,249 @@ body.modal-open {
     25%       { transform: translateX(-8px); }
     75%       { transform: translateX(8px); }
 }
+
+/* ==========================================================
+   PRIMARY RESUME HERO CARD (Prominent Showcase in Vault)
+   ========================================================== */
+.main-resume-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f6f4ff 60%, #ede9fe 100%);
+    border: 2px solid #7c3aed;
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 22px;
+    box-shadow: 0 12px 32px rgba(124, 58, 237, 0.12);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-resume-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6c5ce7, #a29bfe, #00b894);
+}
+
+.main-resume-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(124, 58, 237, 0.18);
+    border-color: #6d28d9;
+}
+
+.resume-card-badge {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.resume-card-badge span:first-child {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #6d28d9;
+    background: #ede9fe;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid #ddd6fe;
+}
+
+.ats-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #047857;
+    background: #d1fae5;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid #a7f3d0;
+}
+
+.resume-card-body {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.resume-card-icon-box {
+    position: relative;
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    flex-shrink: 0;
+}
+
+.resume-icon {
+    font-size: 28px;
+}
+
+.resume-verified-check {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #10b981;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.resume-card-info {
+    flex: 1;
+}
+
+.resume-card-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #1e1b4b;
+    margin: 0 0 4px;
+    letter-spacing: -0.3px;
+}
+
+.resume-card-desc {
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.5;
+    margin: 0 0 14px;
+}
+
+.resume-state-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.btn-resume-upload {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #6c5ce7, #7c3aed);
+    color: #fff;
+    padding: 11px 20px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(108, 92, 231, 0.35);
+    transition: all 0.2s ease;
+    border: none;
+    text-align: center;
+}
+
+.btn-resume-upload:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 92, 231, 0.45);
+    color: #fff;
+}
+
+.resume-hint {
+    font-size: 11.5px;
+    color: #888;
+}
+
+.resume-file-info {
+    background: #fff;
+    border: 1px solid #e0d7ff;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+}
+
+.resume-file-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #2d1b69;
+    word-break: break-all;
+}
+
+.resume-file-meta {
+    font-size: 11.5px;
+    color: #10b981;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.resume-card-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-resume-action {
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-resume-replace {
+    background: #fff;
+    border-color: #d1d5db;
+    color: #374151;
+}
+.btn-resume-replace:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.btn-resume-scan {
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+}
+.btn-resume-scan:hover {
+    background: linear-gradient(135deg, #047857, #059669);
+    transform: translateY(-1px);
+}
+
+.btn-resume-remove {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #dc2626;
+    padding: 7px 10px;
+}
+.btn-resume-remove:hover {
+    background: #fca5a5;
+    color: #fff;
+}
+
+.proof-vault-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 16px;
+}
+.proof-vault-divider::before, .proof-vault-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e2e8f0;
+}
+.proof-vault-divider span {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: #64748b;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}

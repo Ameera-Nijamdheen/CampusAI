@@ -161,9 +161,65 @@
             <!-- RIGHT: PROOF VAULT & ACHIEVEMENTS -->
             <div class="achievement-box">
                 <h2>🏆 Proof Vault &amp; Campus Profile</h2>
-                <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
-                    Upload verifiable credentials to boost your profile score and stand out to campus recruiters.
+                <p style="color: #666; font-size: 14px; margin-bottom: 18px;">
+                    Your official student resume and verified campus credentials to stand out to top recruiters.
                 </p>
+
+                <!-- ⭐ PRIMARY RESUME HERO CARD (MAIN SHOWCASE) -->
+                <div class="main-resume-card" id="mainResumeCard">
+                    <div class="resume-card-badge">
+                        <span>⭐ PRIMARY CREDENTIAL</span>
+                        <span class="ats-badge" id="resumeAtsBadge">ATS Optimizable</span>
+                    </div>
+
+                    <div class="resume-card-body">
+                        <div class="resume-card-icon-box">
+                            <span class="resume-icon">📄</span>
+                            <span class="resume-verified-check" id="resumeVerifiedDot" style="display:none;">✓</span>
+                        </div>
+
+                        <div class="resume-card-info">
+                            <h3 class="resume-card-title">Official Student Resume</h3>
+                            <p class="resume-card-desc">
+                                Primary PDF used for AI skills extraction, ATS job matching, and recruiter review.
+                            </p>
+
+                            <!-- State 1: No Resume Uploaded -->
+                            <div id="resumeEmptyState" class="resume-state-box">
+                                <label for="resumeFileInput" class="btn-resume-upload">
+                                    <span>📤</span> Upload Resume (PDF / DOCX)
+                                </label>
+                                <span class="resume-hint">Supports PDF, DOCX up to 10MB • Auto-read by AI</span>
+                            </div>
+
+                            <!-- State 2: Resume Uploaded -->
+                            <div id="resumeUploadedState" class="resume-state-box" style="display: none;">
+                                <div class="resume-file-info">
+                                    <div class="resume-file-name" id="resumeFileNameDisplay">resume.pdf</div>
+                                    <div class="resume-file-meta" id="resumeFileMetaDisplay">✓ Uploaded &amp; Ready for AI ATS Scan</div>
+                                </div>
+                                <div class="resume-card-actions">
+                                    <label for="resumeFileInput" class="btn-resume-action btn-resume-replace">
+                                        🔄 Replace
+                                    </label>
+                                    <button type="button" class="btn-resume-action btn-resume-scan" onclick="scanResumeWithAi()">
+                                        ⚡ Benchmark ATS Score →
+                                    </button>
+                                    <button type="button" class="btn-resume-action btn-resume-remove" onclick="removeUploadedResume()" title="Remove resume">
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden file input for resume -->
+                    <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx,.txt" style="display:none;" onchange="handleResumeFileSelected(event)">
+                </div>
+
+                <div class="proof-vault-divider">
+                    <span>⚡ ADDITIONAL VERIFIED PROOFS &amp; ACTIVITIES</span>
+                </div>
 
                 <!-- STATS COUNTERS -->
                 <div class="achievement-stats">

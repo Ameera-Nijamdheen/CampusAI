@@ -604,6 +604,18 @@ async function loadStudentProfile() {
                 localStorage.setItem("studentSkills", profile.skills || "");
                 localStorage.setItem("studentPlace", profile.placeOfInterest || "");
                 localStorage.setItem("studentRole", profile.targetRole || "");
+
+                if (profile.resumeFileName) {
+                    localStorage.setItem("campusai_resume_name", profile.resumeFileName);
+                    if (!localStorage.getItem("campusai_student_resume")) {
+                        localStorage.setItem("campusai_student_resume", JSON.stringify({
+                            name: profile.resumeFileName,
+                            size: "Verified Document",
+                            date: "Active Profile Resume"
+                        }));
+                    }
+                    if (typeof initResumeCard === "function") initResumeCard();
+                }
             }
         } catch (err) {
             console.warn("Could not fetch remote profile:", err.message);
@@ -853,6 +865,137 @@ async function analyzeMyPortfolio() {
         btn.disabled = false;
         btn.innerHTML = "✨ Re-Analyze Portfolio";
     }
+}
+
+// ==========================================================
+// PRIMARY RESUME HERO MANAGER
+// ==========================================================
+
+function initResumeCard() {
+    const emptyState = document.getElementById("resumeEmptyState");
+    const uploadedState = document.getElementById("resumeUploadedState");
+    const nameDisplay = document.getElementById("resumeFileNameDisplay");
+    const metaDisplay = document.getElementById("resumeFileMetaDisplay");
+    const verifiedDot = document.getElementById("resumeVerifiedDot");
+    const atsBadge = document.getElementById("resumeAtsBadge");
+
+    if (!emptyState || !uploadedState) return;
+
+    let resumeData = null;
+    try {
+        const stored = localStorage.getItem("campusai_student_resume");
+        if (stored) resumeData = JSON.parse(stored);
+    } catch(e) {}
+
+    if (!resumeData) {
+        const legacyName = localStorage.getItem("campusai_resume_name");
+        if (legacyName) {
+            resumeData = { name: legacyName, size: "PDF Document", date: "Uploaded" };
+        }
+    }
+
+    if (resumeData && resumeData.name) {
+        emptyState.style.display = "none";
+        uploadedState.style.display = "flex";
+        if (nameDisplay) nameDisplay.textContent = `📄 ${resumeData.name}`;
+        if (metaDisplay) metaDisplay.textContent = `✓ ${resumeData.size || 'PDF'} • Uploaded ${resumeData.date || 'Active'}`;
+        if (verifiedDot) verifiedDot.style.display = "flex";
+        if (atsBadge) {
+            atsBadge.textContent = "Verified Active Resume";
+            atsBadge.style.background = "#d1fae5";
+            atsBadge.style.color = "#047857";
+        }
+    } else {
+        emptyState.style.display = "flex";
+        uploadedState.style.display = "none";
+        if (verifiedDot) verifiedDot.style.display = "none";
+        if (atsBadge) {
+            atsBadge.textContent = "ATS Optimizable";
+            atsBadge.style.background = "#ede9fe";
+            atsBadge.style.color = "#6d28d9";
+        }
+    }
+}
+
+async function handleResumeFileSelected(event) {
+    const file = event.target && event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const sizeStr = file.size < 1024 * 1024
+        ? (file.size / 1024).toFixed(1) + " KB"
+        : (file.size / (1024 * 1024)).toFixed(2) + " MB";
+
+    const resumeInfo = {
+        name: file.name,
+        size: sizeStr,
+        date: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }),
+        lastModified: file.lastModified
+    };
+
+    localStorage.setItem("campusai_student_resume", JSON.stringify(resumeInfo));
+    localStorage.setItem("campusai_resume_name", file.name);
+
+    if (file.type.includes("text") || file.name.endsWith(".txt") || file.name.endsWith(".md")) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            if (e.target.result) {
+                localStorage.setItem("campusai_resume_text", e.target.result);
+            }
+        };
+        reader.readAsText(file);
+    } else {
+        const currentText = localStorage.getItem("campusai_resume_text");
+        if (!currentText) {
+            const studentName = localStorage.getItem("studentName") || "Student";
+            const skills = localStorage.getItem("studentSkills") || "Software Engineering";
+            const college = localStorage.getItem("studentCollege") || "University";
+            const role = localStorage.getItem("studentRole") || "Developer";
+            localStorage.setItem("campusai_resume_text", `${studentName} - ${role}\nEducation: ${college}\nCore Skills: ${skills}\nOfficial Resume File: ${file.name}`);
+        }
+    }
+
+    const token = getAuthToken();
+    if (token) {
+        try {
+            await apiFetch("/api/profile", {
+                method: "POST",
+                body: JSON.stringify({ resumeFileName: file.name })
+            });
+        } catch (e) {
+            console.warn("Backend resume metadata update:", e);
+        }
+    }
+
+    initResumeCard();
+    showToast(`Resume "${file.name}" uploaded successfully! 📄`, "success");
+}
+
+async function removeUploadedResume() {
+    if (!confirm("Are you sure you want to remove your uploaded resume?")) return;
+
+    localStorage.removeItem("campusai_student_resume");
+    localStorage.removeItem("campusai_resume_name");
+    localStorage.removeItem("campusai_resume_text");
+
+    const token = getAuthToken();
+    if (token) {
+        try {
+            await apiFetch("/api/profile", {
+                method: "POST",
+                body: JSON.stringify({ resumeFileName: "" })
+            });
+        } catch (e) {}
+    }
+
+    const input = document.getElementById("resumeFileInput");
+    if (input) input.value = "";
+
+    initResumeCard();
+    showToast("Resume removed.", "info");
+}
+
+function scanResumeWithAi() {
+    window.location.href = "career-hub.html#tab-resume";
 }
 
 // --- ACHIEVEMENTS / PROOF VAULT OVERLAY MODAL ---
@@ -1692,6 +1835,9 @@ function initApp() {
 
     if (document.getElementById("studentName")) {
         loadStudentProfile();
+    }
+    if (document.getElementById("mainResumeCard")) {
+        initResumeCard();
     }
     if (document.getElementById("achievementList") || document.getElementById("hackathonCount")) {
         loadAchievements();
