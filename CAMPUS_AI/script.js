@@ -196,7 +196,7 @@ async function verifySession() {
         const res = await fetch(API_BASE + "/api/auth/me", {
             headers: { "Authorization": `Bearer ${token}` }
         });
-        if (res.status === 401 || res.status === 403) {
+        if (res.status === 401 || res.status === 403 || res.status === 404) {
             clearAllUserSessionData();
             const nav = document.getElementById("mainNavbar");
             if (nav) {
@@ -612,113 +612,105 @@ async function loadStudentProfile() {
 }
 
 async function saveStudentDetails() {
-    const fullName = document.getElementById("studentName") ? document.getElementById("studentName").value.trim() : "";
-    const college = document.getElementById("studentCollege") ? document.getElementById("studentCollege").value.trim() : "";
-    const course = document.getElementById("studentCourse") ? document.getElementById("studentCourse").value.trim() : "";
-    const year = document.getElementById("studentYear") ? document.getElementById("studentYear").value.trim() : "";
-    const gpa = document.getElementById("studentGpa") ? document.getElementById("studentGpa").value.trim() : "";
-    const placeOfInterest = document.getElementById("studentPlace") ? document.getElementById("studentPlace").value.trim() : "Bangalore / Remote";
-    const targetRole = document.getElementById("studentRole") ? document.getElementById("studentRole").value.trim() : "";
-    const skills = document.getElementById("studentSkills") ? document.getElementById("studentSkills").value.trim() : "";
-    const interests = document.getElementById("studentInterests") ? document.getElementById("studentInterests").value.trim() : "";
-    const careerGoals = document.getElementById("studentGoals") ? document.getElementById("studentGoals").value.trim() : "";
-
-    // Strict validation: Mandatory fields cannot be skipped
-    if (!fullName) {
-        showToast("Full Name is required.", "error");
-        document.getElementById("studentName")?.focus();
-        return;
-    }
-    if (!college) {
-        showToast("College / University Name is required.", "error");
-        document.getElementById("studentCollege")?.focus();
-        return;
-    }
-    if (!course) {
-        showToast("Degree & Branch / Major is required.", "error");
-        document.getElementById("studentCourse")?.focus();
-        return;
-    }
-    if (!year) {
-        showToast("Current Year is required.", "error");
-        document.getElementById("studentYear")?.focus();
-        return;
-    }
-    if (!targetRole) {
-        showToast("Target Dream Career Role is required.", "error");
-        document.getElementById("studentRole")?.focus();
-        return;
-    }
-    if (!skills) {
-        showToast("Current Technical Skills are required.", "error");
-        document.getElementById("studentSkills")?.focus();
-        return;
-    }
-    if (!placeOfInterest) {
-        showToast("Target City / Place of Interest is required.", "error");
-        document.getElementById("studentPlace")?.focus();
-        return;
+    const saveBtn = document.querySelector(".student-box .btn-primary-action");
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = "<span>⏳ Saving Profile…</span>";
     }
 
-    const payload = {
-        fullName,
-        college,
-        course,
-        year,
-        gpa,
-        placeOfInterest,
-        targetRole,
-        skills,
-        interests,
-        careerGoals
-    };
+    try {
+        const fullName = document.getElementById("studentName") ? document.getElementById("studentName").value.trim() : "";
+        const college = document.getElementById("studentCollege") ? document.getElementById("studentCollege").value.trim() : "";
+        const course = document.getElementById("studentCourse") ? document.getElementById("studentCourse").value.trim() : "";
+        const year = document.getElementById("studentYear") ? document.getElementById("studentYear").value.trim() : "";
+        const gpa = document.getElementById("studentGpa") ? document.getElementById("studentGpa").value.trim() : "";
+        const placeOfInterest = document.getElementById("studentPlace") ? document.getElementById("studentPlace").value.trim() : "Bangalore / Remote";
+        const targetRole = document.getElementById("studentRole") ? document.getElementById("studentRole").value.trim() : "";
+        const skills = document.getElementById("studentSkills") ? document.getElementById("studentSkills").value.trim() : "";
+        const interests = document.getElementById("studentInterests") ? document.getElementById("studentInterests").value.trim() : "";
+        const careerGoals = document.getElementById("studentGoals") ? document.getElementById("studentGoals").value.trim() : "";
 
-    // Cache locally & mark profile as completed
-    localStorage.setItem("studentName", fullName);
-    localStorage.setItem("studentCollege", college);
-    localStorage.setItem("studentCourse", course);
-    localStorage.setItem("studentYear", year);
-    localStorage.setItem("studentSkills", skills);
-    localStorage.setItem("studentPlace", placeOfInterest);
-    localStorage.setItem("studentRole", targetRole);
-    localStorage.setItem("campusai_profile_completed", "true");
+        // Strict validation: Mandatory fields cannot be skipped
+        if (!fullName) {
+            showToast("Full Name is required.", "error");
+            document.getElementById("studentName")?.focus();
+            return;
+        }
+        if (!college) {
+            showToast("College / University Name is required.", "error");
+            document.getElementById("studentCollege")?.focus();
+            return;
+        }
+        if (!course) {
+            showToast("Degree & Branch / Major is required.", "error");
+            document.getElementById("studentCourse")?.focus();
+            return;
+        }
+        if (!year) {
+            showToast("Current Year is required.", "error");
+            document.getElementById("studentYear")?.focus();
+            return;
+        }
+        if (!targetRole) {
+            showToast("Target Dream Career Role is required.", "error");
+            document.getElementById("studentRole")?.focus();
+            return;
+        }
+        if (!skills) {
+            showToast("Current Technical Skills are required.", "error");
+            document.getElementById("studentSkills")?.focus();
+            return;
+        }
 
-    const token = getAuthToken();
-    if (token) {
-        try {
-            await apiFetch("/api/profile", {
-                method: "POST",
-                body: JSON.stringify(payload)
-            });
-        } catch (err) {
-            console.warn("Backend profile save:", err);
+        const payload = {
+            fullName,
+            college,
+            course,
+            year,
+            gpa,
+            placeOfInterest,
+            targetRole,
+            skills,
+            interests,
+            careerGoals
+        };
+
+        // Cache locally & mark profile as completed
+        localStorage.setItem("studentName", fullName);
+        localStorage.setItem("studentCollege", college);
+        localStorage.setItem("studentCourse", course);
+        localStorage.setItem("studentYear", year);
+        localStorage.setItem("studentSkills", skills);
+        localStorage.setItem("studentPlace", placeOfInterest);
+        localStorage.setItem("studentRole", targetRole);
+        localStorage.setItem("campusai_profile_completed", "true");
+
+        const token = getAuthToken();
+        if (token) {
+            try {
+                await apiFetch("/api/profile", {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                console.warn("Backend profile save:", err);
+            }
+        }
+
+        showToast("Profile saved successfully! 🎓", "success");
+
+        const isMandatory = new URLSearchParams(window.location.search).get("mandatory") === "true";
+        if (isMandatory) {
+            setTimeout(() => {
+                window.location.href = "career-hub.html";
+            }, 800);
+        }
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = "💾 Save Profile &amp; Launch AI Study Advisor →";
         }
     }
-
-    // Sync to Supabase user if logged in via Supabase
-    if (window.supabaseClient) {
-        try {
-            await window.supabaseClient.auth.updateUser({
-                data: {
-                    fullName,
-                    college,
-                    course,
-                    year,
-                    targetRole,
-                    skills,
-                    placeOfInterest
-                }
-            });
-        } catch (sbErr) {
-            console.warn("Supabase user profile update:", sbErr);
-        }
-    }
-
-    showToast("Profile registration completed successfully! 🎓 Welcome to CampusAI.", "success");
-
-    setTimeout(() => {
-        window.location.href = "career-hub.html";
-    }, 700);
 }
 
 // ==========================================================
@@ -741,6 +733,33 @@ async function analyzeMyPortfolio() {
     btn.innerHTML = `<span style="display:inline-block;animation:spin 1s linear infinite;">⚙️</span> Analyzing...`;
 
     try {
+        // Auto-sync any current form values before analyzing
+        const fullName = document.getElementById("studentName")?.value.trim();
+        const college = document.getElementById("studentCollege")?.value.trim();
+        const course = document.getElementById("studentCourse")?.value.trim();
+        const skills = document.getElementById("studentSkills")?.value.trim();
+        const targetRole = document.getElementById("studentRole")?.value.trim();
+
+        if (fullName && skills) {
+            try {
+                await apiFetch("/api/profile", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        fullName,
+                        college: college || "",
+                        course: course || "",
+                        year: document.getElementById("studentYear")?.value || "3rd Year",
+                        gpa: document.getElementById("studentGpa")?.value.trim() || "",
+                        placeOfInterest: document.getElementById("studentPlace")?.value.trim() || "Bangalore",
+                        targetRole: targetRole || "Software Engineer",
+                        skills,
+                        interests: document.getElementById("studentInterests")?.value.trim() || "",
+                        careerGoals: document.getElementById("studentGoals")?.value.trim() || ""
+                    })
+                });
+            } catch(e) { /* sync attempt */ }
+        }
+
         const analysis = await apiFetch("/api/ai/portfolio-analysis");
 
         // Hide empty state, show panel

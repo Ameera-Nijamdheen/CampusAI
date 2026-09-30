@@ -140,9 +140,12 @@ app.post('/api/auth/login', (req, res) => {
 
 // Get Current User Session
 app.get('/api/auth/me', authenticateToken, (req, res) => {
-    const user = database.findUserById(req.user.id);
+    let user = database.findUserById(req.user.id);
+    if (!user && req.user.email) {
+        user = database.findUserByEmail(req.user.email);
+    }
     if (!user) {
-        return res.status(404).json({ error: "User not found." });
+        return res.status(401).json({ error: "Session expired or user not found. Please log in again." });
     }
     const profile = database.getProfile(user.id);
     res.json({
@@ -477,11 +480,15 @@ app.use('/api/*', (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-    console.log(`====================================================`);
-    console.log(`🚀 CampusAI Backend Server running on http://localhost:${PORT}`);
-    console.log(`⚡ Serving static files from: ${FRONTEND_DIR}`);
-    console.log(`🤖 Groq AI Integration: ${groqService.hasValidGroqKey() ? 'CONNECTED' : 'STANDBY (Intelligent Engine Active)'}`);
-    console.log(`🔐 Supabase: ${process.env.SUPABASE_URL ? 'CONFIGURED (' + process.env.SUPABASE_URL + ')' : 'NOT CONFIGURED (set SUPABASE_URL in .env)'}`);
-    console.log(`====================================================`);
-});
+if (process.env.NODE_ENV !== 'test' && (!process.env.VERCEL || process.env.VERCEL === '0')) {
+    app.listen(PORT, () => {
+        console.log(`====================================================`);
+        console.log(`🚀 CampusAI Backend Server running on http://localhost:${PORT}`);
+        console.log(`⚡ Serving static files from: ${FRONTEND_DIR}`);
+        console.log(`🤖 Groq AI Integration: ${groqService.hasValidGroqKey() ? 'CONNECTED' : 'STANDBY (Intelligent Engine Active)'}`);
+        console.log(`🔐 Supabase: ${process.env.SUPABASE_URL ? 'CONFIGURED (' + process.env.SUPABASE_URL + ')' : 'NOT CONFIGURED (set SUPABASE_URL in .env)'}`);
+        console.log(`====================================================`);
+    });
+}
+
+module.exports = app;

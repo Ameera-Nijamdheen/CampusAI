@@ -2,7 +2,7 @@ const https = require('https');
 const database = require('./database');
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const DEFAULT_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const DEFAULT_MODEL = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
 
 function getActiveGroqKey() {
     // Strictly retrieve the key given in .env (public cannot add custom keys)
@@ -399,96 +399,104 @@ Return STRICTLY a valid JSON object without markdown fences:
     }
 }
 
-async function analyzePortfolio({ profile, achievements }) {
+function computePortfolioFallback({ profile = {}, achievements = [] }) {
     const skillCount = (profile.skills || "").split(",").filter(Boolean).length;
-    const hackCount  = achievements.filter(a => a.type === "Hackathon").length;
-    const certCount  = achievements.filter(a => a.type === "Certification").length;
-    const projCount  = achievements.filter(a => a.type === "Project").length;
-    const workshopCount = achievements.filter(a => a.type === "Workshop").length;
+    const hackCount  = (achievements || []).filter(a => a.type === "Hackathon").length;
+    const certCount  = (achievements || []).filter(a => a.type === "Certification").length;
+    const projCount  = (achievements || []).filter(a => a.type === "Project").length;
+    const workshopCount = (achievements || []).filter(a => a.type === "Workshop").length;
 
-    // Intelligent fallback when no Groq key
+    const base = 40;
+    const profileScore = [
+        profile.fullName, profile.college, profile.course,
+        profile.year, profile.targetRole, profile.skills,
+        profile.placeOfInterest, profile.interests, profile.careerGoals, profile.gpa
+    ].filter(Boolean).filter(v => v.toString().trim() !== '').length * 5;
+    const vaultScore = Math.min(30, (hackCount * 8) + (certCount * 5) + (projCount * 7) + (workshopCount * 3));
+    const skillScore = Math.min(20, skillCount * 3);
+    const total = Math.min(100, base + profileScore + vaultScore + skillScore);
+
+    return {
+        source: "CampusAI Portfolio Engine",
+        overallScore: total,
+        grade: total >= 85 ? "A" : total >= 70 ? "B" : total >= 55 ? "C" : "D",
+        headline: total >= 85
+            ? "Excellent Portfolio – Highly Competitive"
+            : total >= 70
+            ? "Good Portfolio – Some Gaps to Fill"
+            : total >= 55
+            ? "Average Portfolio – Needs Significant Work"
+            : "Needs Improvement – Start Building Now",
+        categories: [
+            {
+                name: "Profile Completeness",
+                score: Math.min(100, profileScore + 50),
+                icon: "👤",
+                feedback: profile.careerGoals
+                    ? "Your profile is well-filled including career goals."
+                    : "Add a career goals statement to strengthen your profile."
+            },
+            {
+                name: "Proof Vault & Credentials",
+                score: Math.min(100, vaultScore * 3 + 10),
+                icon: "🏆",
+                feedback: achievements.length >= 3
+                    ? "Strong vault with diverse credentials."
+                    : "Add more hackathons, certifications and projects to boost credibility."
+            },
+            {
+                name: "Technical Skills Depth",
+                score: Math.min(100, skillScore * 5),
+                icon: "🛠️",
+                feedback: skillCount >= 6
+                    ? "Good breadth of technical skills listed."
+                    : "List more specific tools and frameworks you know."
+            },
+            {
+                name: "Industry Readiness",
+                score: Math.min(100, (hackCount + projCount) * 20 + 20),
+                icon: "🚀",
+                feedback: (hackCount + projCount) >= 2
+                    ? "Hands-on experience shows real-world readiness."
+                    : "Participate in hackathons and build real projects to demonstrate initiative."
+            }
+        ],
+        strengths: [
+            profile.skills ? `Skills listed: ${profile.skills}` : null,
+            hackCount > 0 ? `${hackCount} hackathon(s) showing competitive experience` : null,
+            certCount > 0 ? `${certCount} certification(s) demonstrating continuous learning` : null,
+            profile.targetRole ? `Clear career target: ${profile.targetRole}` : null
+        ].filter(Boolean).slice(0, 4),
+        improvements: [
+            !profile.careerGoals ? { priority: "High", area: "Career Vision", action: "Write a 2–3 sentence career goals statement describing where you want to be in 3–5 years." } : null,
+            !profile.gpa ? { priority: "Medium", area: "Academic Record", action: "Add your CGPA / percentage to make your profile verifiable to recruiters." } : null,
+            skillCount < 5 ? { priority: "High", area: "Skills Breadth", action: `You have ${skillCount} skill(s) listed. Add at least 6–10 specific tools (e.g. Docker, PostgreSQL, PyTorch) with proficiency levels.` } : null,
+            hackCount === 0 ? { priority: "High", area: "Hackathon Experience", action: "Register for at least 1 hackathon. Even participation shows initiative. Check the Opportunities tab." } : null,
+            projCount === 0 ? { priority: "High", area: "Project Portfolio", action: "Add a deployed project with a live demo URL and GitHub link. Real projects are the #1 differentiator for internships." } : null,
+            certCount < 2 ? { priority: "Medium", area: "Certifications", action: "Complete 1–2 industry certifications (e.g. AWS Cloud Practitioner, DeepLearning.AI) and upload them to your vault." } : null,
+            !profile.interests ? { priority: "Low", area: "Interests", action: "List your learning interests (e.g. Generative AI, Cloud Infrastructure) so AI can tailor better guidance." } : null,
+            achievements.length < 2 ? { priority: "High", area: "Proof Vault", action: "Your proof vault is nearly empty. Upload certificates, projects, or workshop completions to build credibility." } : null
+        ].filter(Boolean).slice(0, 6),
+        nextSteps: [
+            `Apply to internships targeting ${profile.placeOfInterest || 'your target city'} in the Opportunities tab`,
+            "Generate your personalized AI Study Roadmap in the Career Hub",
+            "Share your GitHub profile URL in skills to give recruiters direct access to your work"
+        ]
+    };
+}
+
+async function analyzePortfolio({ profile = {}, achievements = [] }) {
     if (!hasValidGroqKey()) {
-        const base = 40;
-        const profileScore = [
-            profile.fullName, profile.college, profile.course,
-            profile.year, profile.targetRole, profile.skills,
-            profile.placeOfInterest, profile.interests, profile.careerGoals, profile.gpa
-        ].filter(Boolean).filter(v => v.toString().trim() !== '').length * 5;
-        const vaultScore = Math.min(30, (hackCount * 8) + (certCount * 5) + (projCount * 7) + (workshopCount * 3));
-        const skillScore = Math.min(20, skillCount * 3);
-        const total = Math.min(100, base + profileScore + vaultScore + skillScore);
-
-        return {
-            source: "CampusAI Portfolio Engine",
-            overallScore: total,
-            grade: total >= 85 ? "A" : total >= 70 ? "B" : total >= 55 ? "C" : "D",
-            headline: total >= 85
-                ? "Excellent Portfolio – Highly Competitive"
-                : total >= 70
-                ? "Good Portfolio – Some Gaps to Fill"
-                : total >= 55
-                ? "Average Portfolio – Needs Significant Work"
-                : "Needs Improvement – Start Building Now",
-            categories: [
-                {
-                    name: "Profile Completeness",
-                    score: Math.min(100, profileScore + 50),
-                    icon: "👤",
-                    feedback: profile.careerGoals
-                        ? "Your profile is well-filled including career goals."
-                        : "Add a career goals statement to strengthen your profile."
-                },
-                {
-                    name: "Proof Vault & Credentials",
-                    score: Math.min(100, vaultScore * 3 + 10),
-                    icon: "🏆",
-                    feedback: achievements.length >= 3
-                        ? "Strong vault with diverse credentials."
-                        : "Add more hackathons, certifications and projects to boost credibility."
-                },
-                {
-                    name: "Technical Skills Depth",
-                    score: Math.min(100, skillScore * 5),
-                    icon: "🛠️",
-                    feedback: skillCount >= 6
-                        ? "Good breadth of technical skills listed."
-                        : "List more specific tools and frameworks you know."
-                },
-                {
-                    name: "Industry Readiness",
-                    score: Math.min(100, (hackCount + projCount) * 20 + 20),
-                    icon: "🚀",
-                    feedback: (hackCount + projCount) >= 2
-                        ? "Hands-on experience shows real-world readiness."
-                        : "Participate in hackathons and build real projects to demonstrate initiative."
-                }
-            ],
-            strengths: [
-                profile.skills ? `Skills listed: ${profile.skills}` : null,
-                hackCount > 0 ? `${hackCount} hackathon(s) showing competitive experience` : null,
-                certCount > 0 ? `${certCount} certification(s) demonstrating continuous learning` : null,
-                profile.targetRole ? `Clear career target: ${profile.targetRole}` : null
-            ].filter(Boolean).slice(0, 4),
-            improvements: [
-                !profile.careerGoals ? { priority: "High", area: "Career Vision", action: "Write a 2–3 sentence career goals statement describing where you want to be in 3–5 years." } : null,
-                !profile.gpa ? { priority: "Medium", area: "Academic Record", action: "Add your CGPA / percentage to make your profile verifiable to recruiters." } : null,
-                skillCount < 5 ? { priority: "High", area: "Skills Breadth", action: `You have ${skillCount} skill(s) listed. Add at least 6–10 specific tools (e.g. Docker, PostgreSQL, PyTorch) with proficiency levels.` } : null,
-                hackCount === 0 ? { priority: "High", area: "Hackathon Experience", action: "Register for at least 1 hackathon. Even participation shows initiative. Check the Opportunities tab." } : null,
-                projCount === 0 ? { priority: "High", area: "Project Portfolio", action: "Add a deployed project with a live demo URL and GitHub link. Real projects are the #1 differentiator for internships." } : null,
-                certCount < 2 ? { priority: "Medium", area: "Certifications", action: "Complete 1–2 industry certifications (e.g. AWS Cloud Practitioner, DeepLearning.AI) and upload them to your vault." } : null,
-                !profile.interests ? { priority: "Low", area: "Interests", action: "List your learning interests (e.g. Generative AI, Cloud Infrastructure) so AI can tailor better guidance." } : null,
-                achievements.length < 2 ? { priority: "High", area: "Proof Vault", action: "Your proof vault is nearly empty. Upload certificates, projects, or workshop completions to build credibility." } : null
-            ].filter(Boolean).slice(0, 6),
-            nextSteps: [
-                `Apply to internships targeting ${profile.placeOfInterest || 'your target city'} in the Opportunities tab`,
-                "Generate your personalized AI Study Roadmap in the Career Hub",
-                "Share your GitHub profile URL in skills to give recruiters direct access to your work"
-            ]
-        };
+        return computePortfolioFallback({ profile, achievements });
     }
 
-    // Live Groq AI analysis
     try {
+        const skillCount = (profile.skills || "").split(",").filter(Boolean).length;
+        const hackCount  = (achievements || []).filter(a => a.type === "Hackathon").length;
+        const certCount  = (achievements || []).filter(a => a.type === "Certification").length;
+        const projCount  = (achievements || []).filter(a => a.type === "Project").length;
+        const workshopCount = (achievements || []).filter(a => a.type === "Workshop").length;
+
         const sysPrompt = `You are a senior technical recruiter and portfolio evaluator for top tech companies.
 You assess student portfolios holistically and provide HIGHLY specific, actionable, and honest feedback.
 Return STRICTLY a valid JSON object (no markdown fences) with this exact schema:
@@ -542,9 +550,8 @@ Generate a comprehensive portfolio analysis with specific, actionable improvemen
         const cleaned = responseText.replace(/```json/gi, '').replace(/```/g, '').trim();
         return JSON.parse(cleaned);
     } catch (err) {
-        console.warn("Portfolio analysis Groq error, using fallback:", err.message);
-        // Fallback — reuse intelligent engine
-        return analyzePortfolio({ profile, achievements });
+        console.warn("Portfolio analysis Groq error, using safe fallback:", err.message);
+        return computePortfolioFallback({ profile, achievements });
     }
 }
 
