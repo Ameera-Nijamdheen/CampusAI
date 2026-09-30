@@ -273,31 +273,32 @@
                             <h3 id="uploadTitle">🏆 Upload Proof Document</h3>
                             <button type="button" class="modal-close-btn" onclick="closeUploadModal()" aria-label="Close modal">✕</button>
                         </div>
-                        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
-                            Attach your verified certificate, hackathon credential, or project details to build your campus proof vault.
-                        </p>
+                        <div class="modal-intro-text">
+                            📎 Attach your verified certificate, hackathon credential, or project details to build your tamper-proof campus vault.
+                        </div>
                         <div class="form-group">
-                            <label for="achievementName">Achievement / Credential Title</label>
+                            <label for="achievementName">🏆 Achievement / Credential Title</label>
                             <input type="text" id="achievementName" placeholder="e.g. Smart India Hackathon Finalist">
                         </div>
                         <div class="form-group">
-                            <label for="organization">Issuing Organization / Host</label>
+                            <label for="organization">🏛️ Issuing Organization / Host</label>
                             <input type="text" id="organization" placeholder="e.g. Coursera / IEEE / Google / Ministry of Education">
                         </div>
                         <div class="form-group">
-                            <label for="achievementYear">Year Completed / Awarded</label>
+                            <label for="achievementYear">📅 Year Completed / Awarded</label>
                             <input type="text" id="achievementYear" placeholder="e.g. 2026">
                         </div>
                         <div class="form-group">
-                            <label for="achievementFile">Certificate File (Optional)</label>
+                            <label for="achievementFile">📄 Certificate / Proof File (Optional)</label>
                             <input type="file" id="achievementFile" accept=".pdf,.png,.jpg,.jpeg">
+                            <div class="field-hint">Upload verified PDF, PNG, or JPG document up to 10MB.</div>
                         </div>
                         
-                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <div style="display: flex; gap: 12px; margin-top: 24px;">
                             <button type="button" class="btn-primary-action" onclick="saveAchievement()" style="margin: 0; flex: 1;">
-                                Save to Vault
+                                💾 Save to Vault
                             </button>
-                            <button type="button" class="btn-nav-action btn-nav-outline" onclick="closeUploadModal()" style="margin: 0;">
+                            <button type="button" class="btn-modal-cancel" onclick="closeUploadModal()" style="margin: 0;">
                                 Cancel
                             </button>
                         </div>

@@ -51,17 +51,25 @@
 
                 <!-- Input / Parameter Tuning Box -->
                 <div class="ai-generator-panel">
-                    <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--dark);">
-                        🎯 Tailor Your Guidance Parameters
-                    </h3>
+                    <div class="generator-panel-header">
+                        <div>
+                            <h3 class="generator-panel-title">
+                                🎯 Tailor Your Guidance Parameters
+                            </h3>
+                            <p class="generator-panel-desc">
+                                Fine-tune your profile targets to generate hyper-personalized roadmaps, verified semester courses, and career paths.
+                            </p>
+                        </div>
+                        <span class="generator-panel-badge">⚡ AI ADAPTIVE ENGINE</span>
+                    </div>
 
                     <div class="generator-grid">
-                        <div>
-                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">Degree &amp; Course</label>
+                        <div class="form-group">
+                            <label for="guideCourse">🎓 Degree &amp; Course</label>
                             <input type="text" id="guideCourse" placeholder="e.g. B.Tech Computer Science">
                         </div>
-                        <div>
-                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">Year of Study</label>
+                        <div class="form-group">
+                            <label for="guideYear">📅 Year of Study</label>
                             <select id="guideYear">
                                 <option value="1st Year">1st Year (Freshman)</option>
                                 <option value="2nd Year">2nd Year (Sophomore)</option>
@@ -70,28 +78,28 @@
                                 <option value="Masters / Postgrad">Postgraduate / Masters</option>
                             </select>
                         </div>
-                        <div>
-                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">📍 Place of Interest (Target City)</label>
+                        <div class="form-group">
+                            <label for="guidePlace">📍 Place of Interest (Target City)</label>
                             <input type="text" id="guidePlace" placeholder="e.g. Bangalore, Hyderabad, Remote">
                         </div>
                     </div>
 
                     <div class="generator-grid">
-                        <div>
-                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">🎯 Dream Career Role</label>
+                        <div class="form-group">
+                            <label for="guideRole">🎯 Dream Career Role</label>
                             <input type="text" id="guideRole" placeholder="e.g. AI / Machine Learning Engineer">
                         </div>
-                        <div>
-                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">🛠️ Current Skills</label>
+                        <div class="form-group">
+                            <label for="guideSkills">🛠️ Current Skills</label>
                             <input type="text" id="guideSkills" placeholder="e.g. Python, C++, React, SQL">
                         </div>
-                        <div>
-                            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">❓ Focus Question (Optional)</label>
+                        <div class="form-group">
+                            <label for="guideFocus">❓ Focus Question (Optional)</label>
                             <input type="text" id="guideFocus" placeholder="e.g. What specific courses should I take for GenAI?">
                         </div>
                     </div>
 
-                    <button id="btnGenerateGuidance" class="btn-primary-action" onclick="generateAiCareerGuidance()" style="margin-top: 10px;">
+                    <button id="btnGenerateGuidance" class="btn-primary-action" onclick="generateAiCareerGuidance()" style="margin-top: 14px;">
                         ✨ Generate AI Study Plan &amp; Roadmap
                     </button>
                 </div>
@@ -295,7 +303,10 @@
         <div class="modal-box">
             <div class="modal-header">
                 <h3>🚀 Publish Project to Showcase</h3>
-                <button class="modal-close-btn" onclick="closePublishModal()">✕</button>
+                <button class="modal-close-btn" onclick="closePublishModal()" aria-label="Close modal">✕</button>
+            </div>
+            <div class="modal-intro-text">
+                💡 Showcase your best projects to peer students, recruiters, and mentors across the campus network.
             </div>
             
             <div class="form-group">
@@ -323,7 +334,7 @@
                 <input type="text" id="projTags" placeholder="e.g. Groq, Python, FastAPI, React">
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                 <div class="form-group">
                     <label for="projDemo">Live Demo URL</label>
                     <input type="text" id="projDemo" placeholder="https://yourdemo.com">
@@ -334,11 +345,11 @@
                 </div>
             </div>
 
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
                 <button class="btn-primary-action" onclick="publishProject()" style="margin: 0; flex: 1;">
-                    Publish to Showcase
+                    🚀 Publish to Showcase
                 </button>
-                <button class="btn-nav-action btn-nav-outline" onclick="closePublishModal()" style="margin: 0;">
+                <button class="btn-modal-cancel" onclick="closePublishModal()" style="margin: 0;">
                     Cancel
                 </button>
             </div>
