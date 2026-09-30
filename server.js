@@ -287,6 +287,20 @@ app.post('/api/ai/resume-score', authenticateToken, async (req, res) => {
     }
 });
 
+// Portfolio Strength Analyzer (Requires Login)
+// Scores the student's full profile + proof vault and returns AI-driven suggestions
+app.get('/api/ai/portfolio-analysis', authenticateToken, async (req, res) => {
+    try {
+        const profile = database.getProfile(req.user.id);
+        const achievements = database.getAchievements(req.user.id);
+        const analysis = await groqService.analyzePortfolio({ profile, achievements });
+        res.json(analysis);
+    } catch (err) {
+        console.error("Portfolio analysis error:", err);
+        res.status(500).json({ error: "Portfolio analysis failed: " + err.message });
+    }
+});
+
 // ==========================================
 // 5. OPPORTUNITIES & APPLICATIONS ROUTES
 // ==========================================
